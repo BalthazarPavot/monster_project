@@ -4,7 +4,7 @@ import metadata.Context;
 
 public class ScreenGenerator {
 
-	private Screen screen = null ;
+	private Screen screen = null;
 
 	public ScreenGenerator(Context context) {
 	}
@@ -15,17 +15,17 @@ public class ScreenGenerator {
 	public void prepareScreen(int screenID) {
 		switch (screenID) {
 		case MAIN_MENU_SCREEN:
-			prepareMainscreen () ;
-			break ;
+			prepareMainscreen();
+			break;
 		case QUIT_SCREEN:
 		default:
-			break ;
+			break;
 		}
 	}
 
 	private void prepareMainscreen() {
-		screen = new MainScreen () ;
-		screen.prepare () ;
+		screen = new MainScreen();
+		screen.prepare();
 	}
 
 	public Screen getScreen() {

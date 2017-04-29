@@ -12,12 +12,12 @@ public class Context {
 
 	private ErrorManager errorManager = null;
 	private boolean running = true;
-	private Dimension screenDimensions = new Dimension (640, 480) ;
+	private Dimension screenDimensions = new Dimension(640, 480);
 
-	public User user = new User ();
-	public Project project = new Project () ;
+	public User user = new User();
+	public Project project = new Project();
 
-	public Client client = new Client () ;
+	public Client client = new Client();
 
 	private Context() {
 		this(null);
@@ -65,7 +65,7 @@ public class Context {
 	}
 
 	public Dimension getDimension() {
-		return screenDimensions ;
+		return screenDimensions;
 	}
 
 }

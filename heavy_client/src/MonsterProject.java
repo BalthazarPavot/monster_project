@@ -25,11 +25,10 @@ public class MonsterProject {
 	}
 
 	/**
-	 * Create the context and the error manager, load the config and create
-	 * the screen generator giving the context. <br />
+	 * Create the context and the error manager, load the config and create the
+	 * screen generator giving the context. <br />
 	 * Launch the mainloop that prepare the current screen, make it run, get the
-	 * main screen id and loop again while the user does not decide to
-	 * quit.
+	 * main screen id and loop again while the user does not decide to quit.
 	 * 
 	 * @param screenID
 	 * @throws Exception

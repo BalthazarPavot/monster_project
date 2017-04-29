@@ -31,16 +31,16 @@ public class MainScreen extends Screen {
 	HashMap<String, JComponent> statusBarComponents = new HashMap<>();
 	JPanel allUsersTab = new JPanel(false);
 	JPanel statusBar = new JPanel(new GridLayout());
-	JMenuItem newProject = null ;
-	JMenuItem openProject = null ;
-	JMenuItem projectRights = null ;
-	JMenuItem exit = null ;
-	JMenuItem connect = null ;
-	JMenuItem disconnect = null ;
-	JMenuItem createUser = null ;
-	JMenuItem newGroup = null ;
-	JMenuItem manageGroup = null ;
-	JMenuItem deleteGroup = null ;
+	JMenuItem newProject = null;
+	JMenuItem openProject = null;
+	JMenuItem projectRights = null;
+	JMenuItem exit = null;
+	JMenuItem connect = null;
+	JMenuItem disconnect = null;
+	JMenuItem createUser = null;
+	JMenuItem newGroup = null;
+	JMenuItem manageGroup = null;
+	JMenuItem deleteGroup = null;
 
 	public MainScreen() {
 		super();

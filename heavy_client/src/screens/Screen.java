@@ -27,9 +27,10 @@ public class Screen extends JPanel {
 	protected int nextScreenID = ScreenGenerator.MAIN_MENU_SCREEN;
 
 	public Screen() {
-		context = Context.singleton ;
-		if (Screen.mainFrame == null)
+		context = Context.singleton;
+		if (Screen.mainFrame == null) {
 			Screen.mainFrame = new JFrame();
+		}
 		this.initScreen();
 	}
 
@@ -38,11 +39,10 @@ public class Screen extends JPanel {
 	 * display.
 	 */
 	protected void initScreen() {
-		setLayout(new BorderLayout ());
+		setLayout(new BorderLayout());
 		Screen.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Screen.mainFrame.getContentPane().add(this);
-		Screen.mainFrame.setBounds(0, 0, context.getDimension().width,
-				context.getDimension().height);
+		Screen.mainFrame.setBounds(0, 0, context.getDimension().width, context.getDimension().height);
 		this.screenHasFinished = false;
 	}
 
@@ -71,14 +71,14 @@ public class Screen extends JPanel {
 				this.applicationTermination();
 			}
 		}
-		screenTermination () ;
+		screenTermination();
 		return this.nextScreenID;
 	}
 
 	public void screenTermination() {
 		for (Component widget : widgetList)
 			this.remove(widget);
-		widgetList = new ArrayList<>() ;
+		widgetList = new ArrayList<>();
 		this.removeAll();
 		mainFrame.remove(this);
 		screenHasFinished = true;
