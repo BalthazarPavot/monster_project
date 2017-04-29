@@ -83,9 +83,10 @@ public class MainScreen extends Screen {
 	}
 
 	private void buildNewProjectItem(JMenu file) {
-		JMenuItem newProject = new JMenuItem("New project", KeyEvent.VK_N);
+		newProject = new JMenuItem("New project", KeyEvent.VK_N);
 		setNewProjectItemProperties (newProject) ;
 		newProject.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.ALT_MASK));
+		newProject.setActionCommand("create_project") ;
 		file.add(newProject);
 	}
 
@@ -99,16 +100,18 @@ public class MainScreen extends Screen {
 	}
 
 	private void buildOpenProjectItem(JMenu file) {
-		JMenuItem openProject = new JMenuItem("Open project", KeyEvent.VK_O);
+		openProject = new JMenuItem("Open project", KeyEvent.VK_O);
 		openProject.getAccessibleContext().setAccessibleDescription("Open an existing document");
 		openProject.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.ALT_MASK));
+		openProject.setActionCommand("open_project") ;
 		file.add(openProject);
 	}
 
 	private void buildProjectRightsItem(JMenu file) {
-		JMenuItem projectRights = new JMenuItem("Project Config.", KeyEvent.VK_C);
+		projectRights = new JMenuItem("Project Config.", KeyEvent.VK_C);
 		setProjectRightsItemProperties(projectRights);
 		projectRights.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.ALT_MASK));
+		projectRights.setActionCommand("project_conf") ;
 		file.add(projectRights);
 	}
 
@@ -122,7 +125,7 @@ public class MainScreen extends Screen {
 	}
 
 	private void buildExitItem(JMenu file) {
-		JMenuItem exit = new JMenuItem("Exit", KeyEvent.VK_X);
+		exit = new JMenuItem("Exit", KeyEvent.VK_X);
 		exit.getAccessibleContext().setAccessibleDescription("Exit the application");
 		exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.ALT_MASK));
 		exit.addActionListener(actionListener);
@@ -136,7 +139,7 @@ public class MainScreen extends Screen {
 	}
 
 	private void buildConnectUserItem(JMenu user) {
-		JMenuItem connect = new JMenuItem("Connect", KeyEvent.VK_C);
+		connect = new JMenuItem("Connect", KeyEvent.VK_C);
 		setConnectUserItemProperties (connect) ;
 		connect.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.ALT_MASK));
 		connect.setActionCommand("connect_user");
@@ -153,7 +156,7 @@ public class MainScreen extends Screen {
 	}
 
 	private void buildDisconnectUserItem(JMenu user) {
-		JMenuItem disconnect = new JMenuItem("Disconnect", KeyEvent.VK_D);
+		disconnect = new JMenuItem("Disconnect", KeyEvent.VK_D);
 		setDisconnectUserItemProperties (disconnect) ;
 		disconnect.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.ALT_MASK));
 		disconnect.setActionCommand("disconnect_user");
