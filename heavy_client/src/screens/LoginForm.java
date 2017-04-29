@@ -54,10 +54,10 @@ public class LoginForm extends JDialog implements ActionListener {
 		passwordLabel.setLabelFor(passwordField);
 		loginLabel.setLabelFor(loginField);
 
-		panel.add(passwordLabel);
-		panel.add(passwordField);
 		panel.add(loginLabel);
 		panel.add(loginField);
+		panel.add(passwordLabel);
+		panel.add(passwordField);
 		panel.add(okButton);
 		panel.add(cancelButton);
 		getContentPane().add(panel);
