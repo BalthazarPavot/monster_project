@@ -44,7 +44,6 @@ public class Screen extends JPanel {
 		Screen.mainFrame.setBounds(0, 0, context.getDimension().width,
 				context.getDimension().height);
 		this.screenHasFinished = false;
-		Screen.mainFrame.setVisible(true);
 	}
 
 	/**
@@ -62,9 +61,10 @@ public class Screen extends JPanel {
 	public int run() throws IllegalStateException {
 		if (actionListener == null)
 			throw new IllegalStateException();
-		display () ;
+		Screen.mainFrame.pack();
+		Screen.mainFrame.setVisible(true);
 		while (!this.screenHasFinished) {
-//			display();
+			display();
 			try {
 				Thread.sleep(15);
 			} catch (InterruptedException e) {
@@ -80,6 +80,7 @@ public class Screen extends JPanel {
 			this.remove(widget);
 		widgetList = new ArrayList<>() ;
 		this.removeAll();
+		mainFrame.remove(this);
 		screenHasFinished = true;
 	}
 
