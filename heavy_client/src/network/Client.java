@@ -51,11 +51,9 @@ public class Client {
 
 		post.setHeader("User-Agent", USER_AGENT);
 		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
-		urlParameters.add(new BasicNameValuePair("sn", "C02G8416DRJM"));
-		urlParameters.add(new BasicNameValuePair("cn", ""));
-		urlParameters.add(new BasicNameValuePair("locale", ""));
-		urlParameters.add(new BasicNameValuePair("caller", ""));
-		urlParameters.add(new BasicNameValuePair("num", "12345"));
+		for (String key:parameters.keySet()) {
+			urlParameters.add(new BasicNameValuePair(key, parameters.get(key)));
+		}
 		post.setEntity(new UrlEncodedFormEntity(urlParameters));
 		HttpResponse response;
 		try {
