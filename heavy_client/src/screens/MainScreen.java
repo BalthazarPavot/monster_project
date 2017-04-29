@@ -314,12 +314,16 @@ class MainScreenActionManager implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("exit")) {
+		String action = e.getActionCommand();
+		if (action.equals("exit")) {
 			screen.nextScreenID = ScreenGenerator.QUIT_SCREEN;
-		} else {
-			return;
+			screen.screenTermination();
+		} else if (action.equals("connect_user")) {
+			new LoginForm().run();
+		} else if (action.equals("disconnect_user")) {
+			Context.singleton.user.logout();
 		}
-		screen.screenTermination();
+		((MainScreen) screen).contextUpdatePropagation();
 	}
 
 }
