@@ -22,6 +22,8 @@ SET FOREIGN_KEY_CHECKS = 0 ;
 	DROP TABLE IF EXISTS `permission_document_user`;
 	DROP TABLE IF EXISTS `user`;
 	DROP TABLE IF EXISTS `user_in_group`;
+	DROP TABLE IF EXISTS `message`;
+	DROP TABLE IF EXISTS `message_user`;
 
 SET FOREIGN_KEY_CHECKS = 1 ;
 
