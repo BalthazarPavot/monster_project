@@ -24,8 +24,8 @@ public class ScreenGenerator {
 	}
 
 	private void prepareMainscreen() {
-		// TODO Auto-generated method stub
-		
+		screen = new MainScreen () ;
+		screen.prepare () ;
 	}
 
 	public Screen getScreen() {
