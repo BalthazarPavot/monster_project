@@ -1,14 +1,16 @@
 package screens;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -16,6 +18,9 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
+import javax.swing.border.BevelBorder;
+
+import metadata.Context;
 
 public class MainScreen extends Screen {
 
@@ -23,7 +28,9 @@ public class MainScreen extends Screen {
 	JTabbedPane discussionPannel = null;
 	JPanel documentPannel = null;
 	ArrayList<JComponent> discussionPannelTabs = new ArrayList<JComponent>();
+	HashMap<String, JComponent> statusBarComponents = new HashMap<>();
 	JPanel allUsersTab = new JPanel(false);
+	JPanel statusBar = new JPanel(new GridLayout());
 	JMenuItem newProject = null ;
 	JMenuItem openProject = null ;
 	JMenuItem projectRights = null ;
@@ -45,7 +52,8 @@ public class MainScreen extends Screen {
 		JSplitPane documentContainer = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, prepareTextPanel(),
 				prepareDiscussionPannel());
 		add(documentContainer, BorderLayout.CENTER);
-		add(new Button("South"), BorderLayout.SOUTH);
+		prepareStatusBar();
+		add(statusBar, BorderLayout.SOUTH);
 	}
 
 	private JTabbedPane prepareDiscussionPannel() {
@@ -253,6 +261,30 @@ public class MainScreen extends Screen {
 			deleteGroup.setEnabled(false);
 			deleteGroup.setToolTipText(Screen.GROUP_FEATURE);
 		}
+	}
+
+	private void prepareStatusBar() {
+		JLabel connectedLabel = new JLabel();
+		statusBar.setBorder(new BevelBorder(BevelBorder.LOWERED));
+		statusBarComponents.put("connected", connectedLabel);
+		statusBar.add(connectedLabel, BorderLayout.CENTER);
+		updateStatusBar();
+	}
+
+	private void updateStatusBar() {
+		((JLabel) statusBarComponents.get("connected")).setText(context.user.isConnected()
+				? String.format("Connected as %s", context.user.getLogin()) : "Not Connected");
+	}
+
+	public void contextUpdatePropagation() {
+		setNewProjectItemProperties();
+		setProjectRightsItemProperties();
+		setConnectUserItemProperties();
+		setDisconnectUserItemProperties();
+		setNewGroupItemProperties();
+		setManageGroupItemProperties();
+		setDeleteGroupItemProperties();
+		updateStatusBar();
 	}
 
 }
