@@ -24,6 +24,16 @@ public class MainScreen extends Screen {
 	JPanel documentPannel = null;
 	ArrayList<JComponent> discussionPannelTabs = new ArrayList<JComponent>();
 	JPanel allUsersTab = new JPanel(false);
+	JMenuItem newProject = null ;
+	JMenuItem openProject = null ;
+	JMenuItem projectRights = null ;
+	JMenuItem exit = null ;
+	JMenuItem connect = null ;
+	JMenuItem disconnect = null ;
+	JMenuItem createUser = null ;
+	JMenuItem newGroup = null ;
+	JMenuItem manageGroup = null ;
+	JMenuItem deleteGroup = null ;
 
 	public MainScreen() {
 		super();
@@ -67,12 +77,16 @@ public class MainScreen extends Screen {
 	private void prepareMenuBarFile(JMenuBar menuBar) {
 		JMenu file = new JMenu("Projects");
 		JMenu user = new JMenu("User");
+		JMenu group = new JMenu("Group");
 		file.setMnemonic(KeyEvent.VK_P);
 		user.setMnemonic(KeyEvent.VK_U);
+		group.setMnemonic(KeyEvent.VK_G);
 		prepareMenuBarFileItem(file);
 		prepareMenuBarUserItem(user);
+		prepareMenuBarGroupItem(group);
 		menuBar.add(file);
 		menuBar.add(user);
+		menuBar.add(group);
 	}
 
 	private void prepareMenuBarFileItem(JMenu file) {
@@ -136,6 +150,7 @@ public class MainScreen extends Screen {
 	private void prepareMenuBarUserItem(JMenu user) {
 		buildConnectUserItem(user);
 		buildDisconnectUserItem(user);
+		buildCreateUserItem(user);
 	}
 
 	private void buildConnectUserItem(JMenu user) {
@@ -170,6 +185,38 @@ public class MainScreen extends Screen {
 			disconnect.setEnabled(false);
 			disconnect.getAccessibleContext().setAccessibleDescription("You're not connected");
 		}
+	}
+
+	private void buildCreateUserItem(JMenu user) {
+		createUser = new JMenuItem("New User", KeyEvent.VK_R);
+		createUser.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.ALT_MASK));
+		createUser.setActionCommand("register_user");
+		user.add(createUser);
+	}
+
+	private void prepareMenuBarGroupItem(JMenu group) {
+		buildNewGroupItem(group);
+		buildManageGroupItem(group);
+		buildDeleteGroupItem(group);
+	}
+
+	private void buildNewGroupItem(JMenu group) {
+		newGroup = new JMenuItem("New Group", KeyEvent.VK_N);
+		newGroup.setActionCommand("new_group");
+		group.add(newGroup);
+	}
+
+	private void buildManageGroupItem(JMenu group) {
+		manageGroup = new JMenuItem("Manage Group", KeyEvent.VK_M);
+		manageGroup.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.ALT_MASK));
+		manageGroup.setActionCommand("manage_group");
+		group.add(manageGroup);
+	}
+
+	private void buildDeleteGroupItem(JMenu group) {
+		deleteGroup = new JMenuItem("Delete Group", KeyEvent.VK_D);
+		deleteGroup.setActionCommand("delete_group");
+		group.add(deleteGroup);
 	}
 
 }
