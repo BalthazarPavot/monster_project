@@ -40,7 +40,7 @@ public class LoginForm extends JDialog implements ActionListener {
 		loginField = new JTextField(10);
 		passwordField = new JPasswordField(10);
 
-		setBounds(0, 0, 200, 100);
+		setBounds(0, 0, 300, 125);
 		loginField.setActionCommand("OK");
 		loginField.addActionListener(this);
 		passwordField.setActionCommand("OK");
