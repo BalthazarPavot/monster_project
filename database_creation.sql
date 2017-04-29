@@ -11,9 +11,6 @@ WHERE table_schema = 'monster_project';
 Then replace lines between the setting of the foreign key constraint
 by the output of that query 
 
-
-UU`id` java 
-
 */
 
 SET FOREIGN_KEY_CHECKS = 0 ;
@@ -80,6 +77,20 @@ CREATE TABLE `permission_document_user` (
 	FOREIGN KEY(`id_user`) REFERENCES `user`(`id`)
 ) ;
 
+CREATE TABLE `message_user` (
+	`id_user` VARCHAR(90) NOT NULL,
+	`id_message` VARCHAR(90) NOT NULL,
+	FOREIGN KEY(`id_user`) REFERENCES `user`(`id`),
+	FOREIGN KEY(`id_message`) REFERENCES `message`(`id`)
+) ;
+
+CREATE TABLE `message` (
+	`id` VARCHAR(90) NOT NULL PRIMARY KEY,
+	`id_user` VARCHAR(90) NOT NULL,
+	`content` VARCHAR(90) NOT NULL,
+	FOREIGN KEY(`id_user`) REFERENCES `user`(`id`)
+) ;
+
 
 SELECT "Filling tables ..." AS 'Message : ' ;
 INSERT INTO `user` (`id`, `pseudo`, `password`) VALUES (1, "Miloune", "azertyuiop") ;
@@ -97,12 +108,7 @@ INSERT INTO `user_in_group` (`id_user`, `id_group`) VALUES (3, 2) ;
 INSERT INTO `document` (`id`, `id_owner`, `name`) VALUES (1, 3, "Mondocument") ;
 
 INSERT INTO `document_text` (`id`, `id_parent`, `content`) VALUES (1, 1, 
-"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
- AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
- DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
- AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
- SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
- SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS") ;
+"Badass") ;
 
 INSERT INTO `permission` (`id`, `r`, `w`, `x`) VALUES (1, 1, 1, 1) ;
 INSERT INTO `permission` (`id`, `r`, `w`, `x`) VALUES (2, 1, 0, 0) ;
