@@ -209,6 +209,7 @@ public class MainScreen extends Screen {
 		createUser.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.ALT_MASK));
 		createUser.setActionCommand("register_user");
 		createUser.addActionListener(actionListener);
+		createUser.setToolTipText("Create an account");
 		user.add(createUser);
 	}
 

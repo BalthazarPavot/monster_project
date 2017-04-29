@@ -14,7 +14,7 @@ public class Screen extends JPanel {
 
 	private static final long serialVersionUID = 1545374598886584677L;
 
-	public static final String LOGIN_FEATURE = "You must be logged to use this feature. Use our website to create an account.";
+	public static final String LOGIN_FEATURE = "You must be logged to use this feature. Use our website or press 'alt-R' to create an account.";
 
 	public static final String GROUP_FEATURE = "You must be into a group to use this feature";
 
