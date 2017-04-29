@@ -7,7 +7,6 @@ public class ScreenGenerator {
 	private Screen screen = null ;
 
 	public ScreenGenerator(Context context) {
-		// TODO Auto-generated constructor stub
 	}
 
 	public static final int MAIN_MENU_SCREEN = 1;
@@ -17,6 +16,7 @@ public class ScreenGenerator {
 		switch (screenID) {
 		case MAIN_MENU_SCREEN:
 			prepareMainscreen () ;
+			break ;
 		case QUIT_SCREEN:
 		default:
 			break ;
