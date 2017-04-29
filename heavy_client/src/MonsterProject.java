@@ -25,13 +25,13 @@ public class MonsterProject {
 	}
 
 	/**
-	 * Create the game context and the error manager, load the config and create
-	 * the game screen generator giving the context. <br />
+	 * Create the context and the error manager, load the config and create
+	 * the screen generator giving the context. <br />
 	 * Launch the mainloop that prepare the current screen, make it run, get the
-	 * new game screen id and loop again while the player does not decide to
+	 * main screen id and loop again while the user does not decide to
 	 * quit.
 	 * 
-	 * @param gameScreenID
+	 * @param screenID
 	 * @throws Exception
 	 */
 	public static void mainloop(int screenID) throws Exception {
