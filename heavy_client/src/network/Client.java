@@ -88,4 +88,19 @@ public class Client {
 		return true;
 	}
 
+	public boolean sendServerRegisterRequest(String login, String password, String email) {
+		HashMap<String, String> parameters = new HashMap<>();
+
+		try {
+			parameters.put("login", login);
+			parameters.put("password", password);
+			parameters.put("password_verif", password);
+			parameters.put("email", password);
+			sendPostRequest(String.format("http://%s/register", Context.singleton.server_adress), parameters);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+
 }
