@@ -73,6 +73,20 @@ public class Client {
 	}
 
 	public boolean sendServerLoginRequest(String login, String password) {
+		HashMap<String, String> parameters = new HashMap<>();
+
+		try {
+			parameters.put("login", login);
+			parameters.put("password", password);
+			sendPostRequest(String.format("http://%s/login", Context.singleton.server_adress), parameters);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+
+	public boolean sendServerExistLogin(String login) {
+		sendGetRequest(String.format("http://%s/logins", Context.singleton.server_adress));
 		return true;
 	}
 
