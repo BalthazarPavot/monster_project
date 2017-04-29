@@ -2,6 +2,7 @@ package metadata;
 
 import java.awt.Dimension;
 
+import network.Client;
 import user.Project;
 import user.User;
 
@@ -15,6 +16,8 @@ public class Context {
 
 	public User user = new User ();
 	public Project project = new Project () ;
+
+	public Client client = new Client () ;
 
 	private Context() {
 		this(null);
