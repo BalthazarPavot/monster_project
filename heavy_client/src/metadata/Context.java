@@ -1,11 +1,14 @@
 package metadata;
 
+import java.awt.Dimension;
+
 public class Context {
 
 	static public Context singleton = new Context();
 
 	private ErrorManager errorManager = null;
 	private boolean running = true;
+	private Dimension screenDimensions = new Dimension (640, 480) ;
 
 	private Context() {
 		this(null);
@@ -50,6 +53,10 @@ public class Context {
 
 	public void loadConfiguration(String[] args) {
 
+	}
+
+	public Dimension getDimension() {
+		return screenDimensions ;
 	}
 
 }
