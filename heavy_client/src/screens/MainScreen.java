@@ -321,6 +321,8 @@ class MainScreenActionManager implements ActionListener {
 			screen.screenTermination();
 		} else if (action.equals("connect_user")) {
 			new LoginForm().run();
+		} else if (action.equals("register_user")) {
+			new RegisterForm().run();
 		} else if (action.equals("disconnect_user")) {
 			Context.singleton.user.logout();
 		}
