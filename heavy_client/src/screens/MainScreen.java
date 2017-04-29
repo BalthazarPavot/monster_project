@@ -98,13 +98,13 @@ public class MainScreen extends Screen {
 
 	private void buildNewProjectItem(JMenu file) {
 		newProject = new JMenuItem("New project", KeyEvent.VK_N);
-		setNewProjectItemProperties (newProject) ;
+		setNewProjectItemProperties();
 		newProject.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.ALT_MASK));
 		newProject.setActionCommand("create_project") ;
 		file.add(newProject);
 	}
 
-	private void setNewProjectItemProperties(JMenuItem newProject) {
+	private void setNewProjectItemProperties() {
 		if (context.user.isConnected()) {
 			newProject.getAccessibleContext().setAccessibleDescription("Create a new document");
 		} else {
@@ -123,7 +123,7 @@ public class MainScreen extends Screen {
 
 	private void buildProjectRightsItem(JMenu file) {
 		projectRights = new JMenuItem("Project Config.", KeyEvent.VK_C);
-		setProjectRightsItemProperties(projectRights);
+		setProjectRightsItemProperties();
 		projectRights.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.ALT_MASK));
 		projectRights.setActionCommand("project_conf") ;
 		file.add(projectRights);
@@ -155,13 +155,13 @@ public class MainScreen extends Screen {
 
 	private void buildConnectUserItem(JMenu user) {
 		connect = new JMenuItem("Connect", KeyEvent.VK_C);
-		setConnectUserItemProperties (connect) ;
+		setConnectUserItemProperties();
 		connect.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.ALT_MASK));
 		connect.setActionCommand("connect_user");
 		user.add(connect);
 	}
 
-	private void setConnectUserItemProperties(JMenuItem connect) {
+	private void setConnectUserItemProperties() {
 		if (context.user.isConnected()) {
 			connect.setEnabled(false);
 			connect.getAccessibleContext().setAccessibleDescription("You're already connected");
@@ -172,13 +172,13 @@ public class MainScreen extends Screen {
 
 	private void buildDisconnectUserItem(JMenu user) {
 		disconnect = new JMenuItem("Disconnect", KeyEvent.VK_D);
-		setDisconnectUserItemProperties (disconnect) ;
+		setDisconnectUserItemProperties();
 		disconnect.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.ALT_MASK));
 		disconnect.setActionCommand("disconnect_user");
 		user.add(disconnect);
 	}
 
-	private void setDisconnectUserItemProperties(JMenuItem disconnect) {
+	private void setDisconnectUserItemProperties() {
 		if (context.user.isConnected()) {
 			disconnect.getAccessibleContext().setAccessibleDescription("Disconnect");
 		} else {
