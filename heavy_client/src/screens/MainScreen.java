@@ -202,21 +202,57 @@ public class MainScreen extends Screen {
 
 	private void buildNewGroupItem(JMenu group) {
 		newGroup = new JMenuItem("New Group", KeyEvent.VK_N);
+		setNewGroupItemProperties();
 		newGroup.setActionCommand("new_group");
+		newGroup.addActionListener(actionListener);
 		group.add(newGroup);
+	}
+
+	private void setNewGroupItemProperties() {
+		if (context.user.isConnected()) {
+			newGroup.setToolTipText("Create a new group");
+			newGroup.setEnabled(true);
+		} else {
+			newGroup.setEnabled(false);
+			newGroup.setToolTipText(Screen.LOGIN_FEATURE);
+		}
 	}
 
 	private void buildManageGroupItem(JMenu group) {
 		manageGroup = new JMenuItem("Manage Group", KeyEvent.VK_M);
+		setManageGroupItemProperties();
 		manageGroup.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, ActionEvent.ALT_MASK));
 		manageGroup.setActionCommand("manage_group");
+		manageGroup.addActionListener(actionListener);
 		group.add(manageGroup);
+	}
+
+	private void setManageGroupItemProperties() {
+		if (context.user.isConnected()) {
+			manageGroup.setToolTipText("Add users to this group");
+			manageGroup.setEnabled(true);
+		} else {
+			manageGroup.setEnabled(false);
+			manageGroup.setToolTipText(Screen.GROUP_FEATURE);
+		}
 	}
 
 	private void buildDeleteGroupItem(JMenu group) {
 		deleteGroup = new JMenuItem("Delete Group", KeyEvent.VK_D);
+		setDeleteGroupItemProperties();
 		deleteGroup.setActionCommand("delete_group");
+		deleteGroup.addActionListener(actionListener);
 		group.add(deleteGroup);
+	}
+
+	private void setDeleteGroupItemProperties() {
+		if (context.user.isConnected()) {
+			deleteGroup.setToolTipText("Disolve oune of your groups");
+			deleteGroup.setEnabled(true);
+		} else {
+			deleteGroup.setEnabled(false);
+			deleteGroup.setToolTipText(Screen.GROUP_FEATURE);
+		}
 	}
 
 }
