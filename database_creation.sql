@@ -62,6 +62,13 @@ CREATE TABLE `permission` (
 	`x` BOOLEAN NOT NULL
 ) ;
 
+CREATE TABLE `message` (
+	`id` VARCHAR(90) NOT NULL PRIMARY KEY,
+	`id_user` VARCHAR(90) NOT NULL,
+	`content` VARCHAR(140) NOT NULL,
+	FOREIGN KEY(`id_user`) REFERENCES `user`(`id`)
+) ;
+
 SELECT "Creating jointure tables ..." AS 'Message : ' ;
 CREATE TABLE `user_in_group` (
 	`id_user` VARCHAR(90) NOT NULL,
@@ -84,13 +91,6 @@ CREATE TABLE `message_user` (
 	`id_message` VARCHAR(90) NOT NULL,
 	FOREIGN KEY(`id_user`) REFERENCES `user`(`id`),
 	FOREIGN KEY(`id_message`) REFERENCES `message`(`id`)
-) ;
-
-CREATE TABLE `message` (
-	`id` VARCHAR(90) NOT NULL PRIMARY KEY,
-	`id_user` VARCHAR(90) NOT NULL,
-	`content` VARCHAR(90) NOT NULL,
-	FOREIGN KEY(`id_user`) REFERENCES `user`(`id`)
 ) ;
 
 
