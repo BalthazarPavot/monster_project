@@ -2,6 +2,9 @@ package metadata;
 
 import java.awt.Dimension;
 
+import user.Project;
+import user.User;
+
 public class Context {
 
 	static public Context singleton = new Context();
@@ -9,6 +12,9 @@ public class Context {
 	private ErrorManager errorManager = null;
 	private boolean running = true;
 	private Dimension screenDimensions = new Dimension (640, 480) ;
+
+	public User user = new User ();
+	public Project project = new Project () ;
 
 	private Context() {
 		this(null);
