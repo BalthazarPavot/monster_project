@@ -39,7 +39,7 @@ public class Client {
 				result.append(line);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			return null ;
 		}
 		return result.toString();
 	}
@@ -65,7 +65,7 @@ public class Client {
 				result.append(line);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			return null ;
 		}
 		return result.toString();
 	}
@@ -85,7 +85,7 @@ public class Client {
 
 	public boolean sendServerExistLogin(String login) {
 		sendGetRequest(String.format("http://%s/logins", Context.singleton.server_adress));
-		return true;
+		return false;
 	}
 
 	public boolean sendServerRegisterRequest(String login, String password, String email) {
