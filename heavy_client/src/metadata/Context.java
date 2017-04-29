@@ -8,6 +8,10 @@ import user.User;
 
 public class Context {
 
+	public String server_ip = "127.0.0.1";
+	public Integer server_port = 8520;
+	public String server_adress = String.format ("%s:%d", server_ip, server_port);
+
 	static public Context singleton = new Context();
 
 	private ErrorManager errorManager = null;
