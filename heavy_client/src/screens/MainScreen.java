@@ -108,16 +108,18 @@ public class MainScreen extends Screen {
 		newProject = new JMenuItem("New project", KeyEvent.VK_N);
 		setNewProjectItemProperties();
 		newProject.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.ALT_MASK));
-		newProject.setActionCommand("create_project") ;
+		newProject.setActionCommand("create_project");
+		newProject.addActionListener(actionListener);
 		file.add(newProject);
 	}
 
 	private void setNewProjectItemProperties() {
 		if (context.user.isConnected()) {
-			newProject.getAccessibleContext().setAccessibleDescription("Create a new document");
+			newProject.setToolTipText("Create a new document");
+			newProject.setEnabled(true);
 		} else {
 			newProject.setEnabled(false);
-			newProject.getAccessibleContext().setAccessibleDescription(Screen.LOGIN_FEATURE);
+			newProject.setToolTipText(Screen.LOGIN_FEATURE);
 		}
 	}
 
@@ -125,7 +127,8 @@ public class MainScreen extends Screen {
 		openProject = new JMenuItem("Open project", KeyEvent.VK_O);
 		openProject.getAccessibleContext().setAccessibleDescription("Open an existing document");
 		openProject.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.ALT_MASK));
-		openProject.setActionCommand("open_project") ;
+		openProject.setActionCommand("open_project");
+		openProject.addActionListener(actionListener);
 		file.add(openProject);
 	}
 
@@ -133,16 +136,18 @@ public class MainScreen extends Screen {
 		projectRights = new JMenuItem("Project Config.", KeyEvent.VK_C);
 		setProjectRightsItemProperties();
 		projectRights.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.ALT_MASK));
-		projectRights.setActionCommand("project_conf") ;
+		projectRights.setActionCommand("project_conf");
+		projectRights.addActionListener(actionListener);
 		file.add(projectRights);
 	}
 
-	public void setProjectRightsItemProperties(JMenuItem projectRights) {
+	public void setProjectRightsItemProperties() {
 		if (context.project.isLoaded()) {
-			projectRights.getAccessibleContext().setAccessibleDescription("Configure project's r/w rights");
+			projectRights.setToolTipText("Configure project's r/w rights");
+			projectRights.setEnabled(true);
 		} else {
 			projectRights.setEnabled(false);
-			projectRights.getAccessibleContext().setAccessibleDescription("No project loaded yet");
+			projectRights.setToolTipText("No project loaded yet");
 		}
 	}
 
@@ -166,15 +171,17 @@ public class MainScreen extends Screen {
 		setConnectUserItemProperties();
 		connect.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, ActionEvent.ALT_MASK));
 		connect.setActionCommand("connect_user");
+		connect.addActionListener(actionListener);
 		user.add(connect);
 	}
 
 	private void setConnectUserItemProperties() {
 		if (context.user.isConnected()) {
 			connect.setEnabled(false);
-			connect.getAccessibleContext().setAccessibleDescription("You're already connected");
+			connect.setToolTipText("You're already connected");
 		} else {
-			connect.getAccessibleContext().setAccessibleDescription("Connect to your account");
+			connect.setToolTipText("Connect to your account");
+			connect.setEnabled(true);
 		}
 	}
 
@@ -183,15 +190,17 @@ public class MainScreen extends Screen {
 		setDisconnectUserItemProperties();
 		disconnect.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.ALT_MASK));
 		disconnect.setActionCommand("disconnect_user");
+		disconnect.addActionListener(actionListener);
 		user.add(disconnect);
 	}
 
 	private void setDisconnectUserItemProperties() {
 		if (context.user.isConnected()) {
-			disconnect.getAccessibleContext().setAccessibleDescription("Disconnect");
+			disconnect.setToolTipText("Disconnects you");
+			disconnect.setEnabled(true);
 		} else {
 			disconnect.setEnabled(false);
-			disconnect.getAccessibleContext().setAccessibleDescription("You're not connected");
+			disconnect.setToolTipText("You're not connected");
 		}
 	}
 
@@ -199,6 +208,7 @@ public class MainScreen extends Screen {
 		createUser = new JMenuItem("New User", KeyEvent.VK_R);
 		createUser.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.ALT_MASK));
 		createUser.setActionCommand("register_user");
+		createUser.addActionListener(actionListener);
 		user.add(createUser);
 	}
 
