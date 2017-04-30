@@ -266,7 +266,7 @@ public class MainScreen extends Screen {
 
 	private void setDeleteGroupItemProperties() {
 		if (context.user.isConnected()) {
-			deleteGroup.setToolTipText("Disolve oune of your groups");
+			deleteGroup.setToolTipText("Disolve one of your groups");
 			deleteGroup.setEnabled(true);
 		} else {
 			deleteGroup.setEnabled(false);
