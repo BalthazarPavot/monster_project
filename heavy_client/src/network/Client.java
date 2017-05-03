@@ -23,64 +23,73 @@ public class Client {
 
 	static private String USER_AGENT = "HeavyClient1.0 - Monster Project";
 
-	private String sendGetRequest(String url) {
+	private HTTPResponse sendGetRequest(String url) {
 		HttpClient client = HttpClientBuilder.create().build();
 		HttpGet request = new HttpGet(url);
 		StringBuffer result = null;
+		HTTPResponse http_response = new HTTPResponse();
 
 		request.addHeader("User-Agent", USER_AGENT);
 		HttpResponse response;
 		try {
 			response = client.execute(request);
+			http_response.setErrorCode(response.getStatusLine().getStatusCode());
 			BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 			result = new StringBuffer();
 			String line = "";
 			while ((line = rd.readLine()) != null) {
 				result.append(line);
 			}
+			http_response.setContent(result.toString());
 		} catch (IOException e) {
-			return null ;
+			Context.singleton.setSilencedError(e);
+			return null;
 		}
-		return result.toString();
+		return http_response;
 	}
 
-	private String sendPostRequest(String url, HashMap<String, String> parameters) throws UnsupportedEncodingException {
+	private HTTPResponse sendPostRequest(String url, HashMap<String, String> parameters)
+			throws UnsupportedEncodingException {
 		HttpClient client = HttpClientBuilder.create().build();
 		HttpPost post = new HttpPost(url);
 		StringBuffer result = null;
+		HTTPResponse http_response = new HTTPResponse();
 
 		post.setHeader("User-Agent", USER_AGENT);
 		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
-		for (String key:parameters.keySet()) {
+		for (String key : parameters.keySet()) {
 			urlParameters.add(new BasicNameValuePair(key, parameters.get(key)));
 		}
 		post.setEntity(new UrlEncodedFormEntity(urlParameters));
 		HttpResponse response;
 		try {
 			response = client.execute(post);
+			http_response.setErrorCode(response.getStatusLine().getStatusCode());
 			BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 			result = new StringBuffer();
 			String line = "";
 			while ((line = rd.readLine()) != null) {
 				result.append(line);
 			}
+			http_response.setContent(result.toString());
 		} catch (IOException e) {
-			return null ;
+			Context.singleton.setSilencedError(e);
+			return null;
 		}
-		return result.toString();
+		return http_response;
 	}
 
-	public boolean sendServerLoginRequest(String login, String password) {
+	public HTTPResponse sendServerLoginRequest(String login, String password) {
 		HashMap<String, String> parameters = new HashMap<>();
 
 		try {
 			parameters.put("login", login);
 			parameters.put("password", password);
-			sendPostRequest(String.format("http://%s/login", Context.singleton.server_adress), parameters);
+			return sendPostRequest(getLoginURL(), parameters);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		return true;
+		return null;
 	}
 
 	public boolean sendServerExistLogin(String login) {
@@ -88,7 +97,7 @@ public class Client {
 		return false;
 	}
 
-	public boolean sendServerRegisterRequest(String login, String password, String email) {
+	public HTTPResponse sendServerRegisterRequest(String login, String password, String email) {
 		HashMap<String, String> parameters = new HashMap<>();
 
 		try {
@@ -96,11 +105,11 @@ public class Client {
 			parameters.put("password", password);
 			parameters.put("password_verif", password);
 			parameters.put("email", password);
-			sendPostRequest(String.format("http://%s/register", Context.singleton.server_adress), parameters);
+			return sendPostRequest(getRegisterURL(), parameters);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		return true;
+		return null;
 	}
 
 }
