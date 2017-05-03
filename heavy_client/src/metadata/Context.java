@@ -77,6 +77,11 @@ public class Context {
 		}
 	}
 
+	public void setSilencedError(Exception error) {
+		errorManager.setError(error);
+		errorManager.silenceError();
+	}
+
 	public void setError(Exception error, Boolean raise) throws Exception {
 		this.errorManager.setError(error);
 		if (raise) {
