@@ -117,11 +117,6 @@ public class Client {
 		return null;
 	}
 
-	public boolean sendServerExistLogin(String login) {
-		sendGetRequest(String.format("http://%s/logins", Context.singleton.server_adress));
-		return false;
-	}
-
 	public HTTPResponse sendServerRegisterRequest(String login, String password, String email) {
 		HashMap<String, String> parameters = new HashMap<>();
 
