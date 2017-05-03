@@ -1,6 +1,11 @@
 package metadata;
 
 import java.awt.Dimension;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Properties;
 
 import network.Client;
 import user.Project;
@@ -8,13 +13,14 @@ import user.User;
 
 public class Context {
 
-	public String server_ip = "127.0.0.1";
-	public Integer server_port = 8520;
-	public String server_adress = String.format ("%s:%d", server_ip, server_port);
-
 	static public Context singleton = new Context();
 
-	private ErrorManager errorManager = null;
+	private String serverIP = "127.0.0.1";
+	private Integer serverPort = 8520;
+	private String serverAdress = String.format("%s:%d", serverIP, serverPort);
+	private String clientIP = "127.0.0.1";
+	private Integer clientPort = 8521;
+	private String clientAdress = String.format("%s:%d", clientIP, clientPort);
 	private Boolean confLoaded = false;
 	private boolean running = true;
 	private Dimension screenDimensions = new Dimension(640, 480);
@@ -22,8 +28,8 @@ public class Context {
 
 	public User user = new User();
 	public Project project = new Project();
-
-	public Client client = new Client();
+	public Client client = null;
+	final public ErrorManager errorManager = ErrorManager.singleton;
 
 	private Context() {
 		this(null);
@@ -156,6 +162,50 @@ public class Context {
 
 	public Dimension getDimension() {
 		return screenDimensions;
+	}
+
+	public String getServerAdress() {
+		return serverAdress;
+	}
+
+	public String getServerIP() {
+		return serverIP;
+	}
+
+	public void setServerIP(String serverIP) {
+		this.serverIP = serverIP;
+		serverAdress = String.format("%s:%d", serverIP, serverPort);
+	}
+
+	public Integer getServerPort() {
+		return serverPort;
+	}
+
+	public void setServerPort(Integer serverPort) {
+		this.serverPort = serverPort;
+		serverAdress = String.format("%s:%d", serverIP, serverPort);
+	}
+
+	public String getClientAdress() {
+		return clientAdress;
+	}
+
+	public String getClientIP() {
+		return clientIP;
+	}
+
+	public void setClientIP(String clientIP) {
+		this.clientIP = clientIP;
+		clientAdress = String.format("%s:%d", clientIP, clientPort);
+	}
+
+	public Integer getClientPort() {
+		return clientPort;
+	}
+
+	public void setClientPort(Integer clientPort) {
+		this.clientPort = clientPort;
+		clientAdress = String.format("%s:%d", clientIP, clientPort);
 	}
 
 	/**
