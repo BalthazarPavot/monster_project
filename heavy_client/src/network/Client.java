@@ -27,7 +27,7 @@ public class Client {
 	static private String LOGGED_USERS_URL = "project/users/{{project_id}}/{{format}}";
 	private String protocol = "http";
 
-	private HTTPResponse sendGetRequest(String url) {
+	public HTTPResponse sendGetRequest(String url) {
 		HttpClient client = HttpClientBuilder.create().build();
 		HttpGet request = new HttpGet(url);
 		StringBuffer result = null;
@@ -52,7 +52,7 @@ public class Client {
 		return http_response;
 	}
 
-	private HTTPResponse sendPostRequest(String url, HashMap<String, String> parameters)
+	public HTTPResponse sendPostRequest(String url, HashMap<String, String> parameters)
 			throws UnsupportedEncodingException {
 		HttpClient client = HttpClientBuilder.create().build();
 		HttpPost post = new HttpPost(url);
