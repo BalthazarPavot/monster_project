@@ -78,7 +78,7 @@ public class LoginForm extends JDialog implements ActionListener {
 	private void login() {
 		login = new String(loginField.getText());
 		password = new String(passwordField.getPassword());
-		if (context.client.sendServerLoginRequest(login, password)) {
+		if (context.client.sendServerLoginRequest(login, password).getErrorCode() == 200) {
 			context.user.setConnected(login);
 			dispose();
 		} else {

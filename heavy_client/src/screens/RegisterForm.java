@@ -101,14 +101,11 @@ public class RegisterForm extends JDialog implements ActionListener {
 		if (password.equals(verifPassword) == false)
 			JOptionPane.showMessageDialog(parent, "Password does not match", "Error Message",
 					JOptionPane.ERROR_MESSAGE);
-		else if (context.client.sendServerExistLogin(login))
-			JOptionPane.showMessageDialog(parent, "This login is already used", "Error Message",
-					JOptionPane.ERROR_MESSAGE);
 		else {
-			if (context.client.sendServerRegisterRequest(login, password, email)) {
+			if (context.client.sendServerRegisterRequest(login, password, email).getErrorCode() == 200) {
 				context.user.setConnected(login);
 				dispose();
-			} else {
+			} else {	
 				JOptionPane.showMessageDialog(parent, "Unexpected error occured", "Error Message",
 						JOptionPane.ERROR_MESSAGE);
 			}
