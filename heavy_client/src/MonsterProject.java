@@ -22,6 +22,8 @@ public class MonsterProject {
 	public static void main(String[] args) throws Exception {
 		Context.singleton.loadConfiguration(args);
 		mainloop(ScreenGenerator.MAIN_MENU_SCREEN);
+		Context.singleton.errorManager.info("Existed normally");
+		System.exit(0);
 	}
 
 	/**
@@ -48,7 +50,6 @@ public class MonsterProject {
 						false);
 			screenID = screen.run();
 		} while (context.isRunning() && screenID != ScreenGenerator.QUIT_SCREEN);
-		System.exit(0);
 	}
 
 }
