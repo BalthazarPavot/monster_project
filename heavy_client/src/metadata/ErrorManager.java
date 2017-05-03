@@ -13,7 +13,11 @@ public class ErrorManager {
 
 	}
 
-	public void setError(Exception error) {
+	public void setSilentError(Exception error) {
+		setError(error);
+		silenceError();
+	}
+		public void setError(Exception error) {
 		if (currentError != null)
 			errors.add(currentError);
 		currentError = error;
@@ -25,6 +29,10 @@ public class ErrorManager {
 
 	public void silenceError() {
 		System.err.printf("[Silenced Error] %s\n", currentError);
+	}
+
+	public void info(String info, Object... strings) {
+		System.err.format(String.format("[info] %s\n", info), strings);
 	}
 
 }
