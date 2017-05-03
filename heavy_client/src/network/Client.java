@@ -22,6 +22,10 @@ import metadata.Context;
 public class Client {
 
 	static private String USER_AGENT = "HeavyClient1.0 - Monster Project";
+	static private String LOGIN_URL = "login";
+	static private String REGISTER_URL = "register";
+	static private String LOGGED_USERS_URL = "project/users/{{project_id}}/{{format}}";
+	private String protocol = "http";
 
 	private HTTPResponse sendGetRequest(String url) {
 		HttpClient client = HttpClientBuilder.create().build();
@@ -77,6 +81,27 @@ public class Client {
 			return null;
 		}
 		return http_response;
+	}
+
+	private String getBaseURL() {
+		return String.format("%s://%s", protocol, Context.singleton.getServerAdress());
+	}
+
+	private String getLoginURL() {
+		return String.format("%s/%s", getBaseURL(), LOGIN_URL);
+	}
+
+	private String getRegisterURL() {
+		return String.format("%s/%s", getBaseURL(), REGISTER_URL);
+	}
+
+	private String getConnectedUsersURL(Integer project_id) {
+		return String.format("%s/%s", getBaseURL(), LOGGED_USERS_URL).replace("{{project_id}}", project_id.toString())
+				.replace("{{format}}", "xml");
+	}
+
+	public HTTPResponse getLoggedUsers(Integer project_id) throws UnsupportedEncodingException {
+		return sendGetRequest(getConnectedUsersURL(project_id));
 	}
 
 	public HTTPResponse sendServerLoginRequest(String login, String password) {
