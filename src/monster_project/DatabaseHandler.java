@@ -1,17 +1,22 @@
 package monster_project ;
 
 import java.sql.* ;
-import java.util.ArrayList ;
 
 public class DatabaseHandler {
 	
-	private static String DB_HOST = "127.0.0.1" ;
-	private static String DB_USER = "root" ;
-	private static String DB_PASSWORD = "trouduc" ;
+	private static final String DRIVER_CLASS = "com.mysql.jdbc.Driver" ;
+	private static final String DB_HOST = "localhost" ;
+	private static final String DB_NAME = "monster_project" ;
+	private static final String DB_PORT = "3306" ;
+	private static final String DB_USER = "root" ;
+	private static final String DB_PASSWORD = ":p" ;
+	private static final String SERVER_URL = "jdbc:mysql://" + DB_HOST + ":" +
+											 DB_PORT + "/" + DB_NAME ;
 
-	private Connection con ;
 
-	public DatabaseHandler () {
+	private Connection conn ;
+
+	public DatabaseHandler () {	
 		System.out.println("Connecting to MySQL server ...") ;
 		try {
 			Class.forName("com.mysql.jdbc.Driver") ;
