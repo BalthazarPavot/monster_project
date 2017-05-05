@@ -2,11 +2,12 @@ package screens;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
+import java.awt.event.KeyListener;
 import java.util.HashMap;
 
 import javax.swing.JComponent;
@@ -15,8 +16,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.border.BevelBorder;
 
@@ -27,7 +30,7 @@ public class MainScreen extends Screen {
 	private static final long serialVersionUID = 2643713053880588518L;
 	JTabbedPane discussionPannel = null;
 	JPanel documentPannel = null;
-	ArrayList<JComponent> discussionPannelTabs = new ArrayList<JComponent>();
+	HashMap<String, JPanel> discussionPannelTabs = new HashMap<String, JPanel>();
 	HashMap<String, JComponent> statusBarComponents = new HashMap<>();
 	JPanel allUsersTab = new JPanel(false);
 	JPanel statusBar = new JPanel(new GridLayout());
@@ -41,6 +44,8 @@ public class MainScreen extends Screen {
 	JMenuItem newGroup = null;
 	JMenuItem manageGroup = null;
 	JMenuItem deleteGroup = null;
+	public ChatManager chatManager = null;
+	public Thread chatManagerThread = null;
 
 	public MainScreen() {
 		super();
@@ -54,6 +59,9 @@ public class MainScreen extends Screen {
 		add(documentContainer, BorderLayout.CENTER);
 		prepareStatusBar();
 		add(statusBar, BorderLayout.SOUTH);
+		chatManager = new ChatManager(this);
+		chatManagerThread = new Thread(chatManager);
+		chatManagerThread.start();
 	}
 
 	private JTabbedPane prepareDiscussionPannel() {
@@ -298,6 +306,24 @@ public class MainScreen extends Screen {
 		updateStatusBar();
 	}
 
+	public void addDiscussionTab(String userName) {
+		JPanel discussionPanel = new JPanel();
+		JTextArea wholeTextArea = new JTextArea();
+		JTextArea textArea = new JTextArea();
+		if (discussionPannelTabs.containsKey(userName) == false) {
+			discussionPannel.addTab(userName, discussionPanel);
+			discussionPannelTabs.put(userName, discussionPanel);
+			discussionPanel.setLayout(new BorderLayout());
+			discussionPanel.add(textArea, BorderLayout.SOUTH);
+			discussionPanel.add(new JScrollPane(wholeTextArea), BorderLayout.CENTER);
+			wholeTextArea.setEditable(false);
+			wholeTextArea.setFont(new Font("Serif", Font.PLAIN, 15));
+			wholeTextArea.setLineWrap(true);
+			textArea.setFont(new Font("Serif", Font.PLAIN, 15));
+			textArea.addKeyListener(new TextAreaListener(wholeTextArea, textArea, this, userName));
+		}
+	}
+
 }
 
 /**
@@ -338,8 +364,44 @@ class MainScreenActionManager implements ActionListener {
 			new RegisterForm().run();
 		} else if (action.equals("disconnect_user")) {
 			Context.singleton.user.logout();
+		} else if (action.matches("^speak_with_.*$")) {
+			((MainScreen) screen).addDiscussionTab(action.substring(11, action.length()));
 		}
 		((MainScreen) screen).contextUpdatePropagation();
 	}
 
+}
+
+class TextAreaListener implements KeyListener {
+
+	private JTextArea area;
+	private JTextArea input;
+	private MainScreen scren;
+	private String target;
+
+	TextAreaListener(JTextArea area, JTextArea input, MainScreen scren, String target) {
+		this.area = area;
+		this.input = input;
+		this.scren = scren;
+		this.target = target;
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			e.consume();
+			if (scren.chatManager.sendMessageTo(target, input.getText())) {
+				area.append(String.format("<%s>: %s\n", Context.singleton.user.getLogin(), input.getText()));
+			} else {
+				area.append(target+ " is not connected anymore.\n");
+			}
+			input.setText("");
+		}
+	}
+
+	public void keyTyped(KeyEvent e) {
+	}
+
+	public void keyReleased(KeyEvent e) {
+	}
 }
