@@ -318,6 +318,19 @@ class MainScreenActionManager implements ActionListener {
 		String action = e.getActionCommand();
 		if (action.equals("exit")) {
 			screen.nextScreenID = ScreenGenerator.QUIT_SCREEN;
+			((MainScreen) screen).chatManager.end();
+			while (((MainScreen) screen).chatManagerThread.isAlive()) {
+				try {
+					((MainScreen) screen).chatManagerThread.join(((MainScreen) screen).chatManager.getRate());
+				} catch (InterruptedException e1) {
+					Context.singleton.setSilencedError(e1);
+				}
+				try {
+					Thread.sleep(((MainScreen) screen).chatManager.getRate());
+				} catch (InterruptedException e2) {
+					Context.singleton.setSilencedError(e2);
+				}
+			}
 			screen.screenTermination();
 		} else if (action.equals("connect_user")) {
 			new LoginForm().run();
