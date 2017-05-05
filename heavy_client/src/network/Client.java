@@ -47,7 +47,7 @@ public class Client {
 			http_response.setContent(result.toString());
 		} catch (IOException e) {
 			Context.singleton.setSilencedError(e);
-			return null;
+			http_response.setErrorCode(0);
 		}
 		return http_response;
 	}
@@ -78,7 +78,7 @@ public class Client {
 			http_response.setContent(result.toString());
 		} catch (IOException e) {
 			Context.singleton.setSilencedError(e);
-			return null;
+			http_response.setErrorCode(0);
 		}
 		return http_response;
 	}
