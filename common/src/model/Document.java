@@ -4,7 +4,6 @@ import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Document {
-
 	private Permission permission = null ;
 	private String content = null ;
 
@@ -26,5 +25,11 @@ public class Document {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	@Override
+	public String toString() {
+		return "Document [permission=" + permission + ", content=" + content + ", id=" + id + ", owner_id=" + owner_id
+				+ ", name=" + name + "]";
 	}
 }

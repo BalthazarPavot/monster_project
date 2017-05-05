@@ -32,20 +32,10 @@ public class User {
 		this.client = client;
 	}
 
-	/**
 	@Override
-	public boolean save() {
-		if (id == null || login == null || email == null || password == null)
-			return false;
-		return true;
+	public String toString() {
+		return "User [client=" + client + ", id=" + id + ", login=" + login + ", email=" + email + ", password="
+				+ password + "]";
 	}
-
-	@Override
-	public boolean retrieve() {
-		if (id == null || login == null || email == null)
-			return false;
-		return true;
-	}
-	*/
 
 }
