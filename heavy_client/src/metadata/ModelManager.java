@@ -9,6 +9,10 @@ import network.HTTPResponse;
 
 public class ModelManager {
 
+	public UserList getLoggedUsers() {
+		return getLoggedUsers(Context.singleton.project.getID());
+	}
+
 	public UserList getLoggedUsers(String project_id) {
 		UserList users = new UserList();
 		HTTPResponse response = null;
