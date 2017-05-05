@@ -2,6 +2,7 @@ package user;
 
 public class Project {
 
+	private String ID = "none";
 	private String name = "untitled";
 	private Boolean WriteUser = false;
 	private Boolean WriteGroup = false;
@@ -10,6 +11,13 @@ public class Project {
 	private Boolean ReadGroup = false;
 	private Boolean ReadOther = false;
 	private Boolean loaded = false;
+
+	public void setID (String ID) {
+		this.ID = ID ;
+	}
+	public String getID () {
+		return ID ;
+	}
 
 	public void loadProject() {
 		loaded = true;

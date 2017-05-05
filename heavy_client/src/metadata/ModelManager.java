@@ -9,8 +9,8 @@ import network.HTTPResponse;
 
 public class ModelManager {
 
-	public UserList getLoggedUsers(Integer project_id) {
-		UserList users = null;
+	public UserList getLoggedUsers(String project_id) {
+		UserList users = new UserList();
 		HTTPResponse response = null;
 
 		try {

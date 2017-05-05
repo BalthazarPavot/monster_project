@@ -95,12 +95,12 @@ public class Client {
 		return String.format("%s/%s", getBaseURL(), REGISTER_URL);
 	}
 
-	private String getConnectedUsersURL(Integer project_id) {
+	private String getConnectedUsersURL(String project_id) {
 		return String.format("%s/%s", getBaseURL(), LOGGED_USERS_URL).replace("{{project_id}}", project_id.toString())
 				.replace("{{format}}", "xml");
 	}
 
-	public HTTPResponse getLoggedUsers(Integer project_id) throws UnsupportedEncodingException {
+	public HTTPResponse getLoggedUsers(String project_id) throws UnsupportedEncodingException {
 		return sendGetRequest(getConnectedUsersURL(project_id));
 	}
 
