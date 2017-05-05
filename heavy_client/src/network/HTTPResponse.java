@@ -37,7 +37,16 @@ public class HTTPResponse {
 		return errorCode;
 	}
 
+	public boolean hasErrorCode(int errorCode) {
+		return this.errorCode == errorCode;
+	}
+
 	public void setErrorCode(Integer errorCode) {
 		this.errorCode = errorCode;
+	}
+
+	@Override
+	public String toString() {
+		return "HTTPResponse [errorCode=" + errorCode + ", content=" + content + "]";
 	}
 }
