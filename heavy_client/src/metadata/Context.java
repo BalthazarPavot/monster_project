@@ -28,15 +28,16 @@ public class Context {
 
 	public User user = new User();
 	public Project project = new Project();
-	public Client client = null;
+	public Client client = new Client();
 	final public ErrorManager errorManager = ErrorManager.singleton;
+	public ModelManager modelManager = null ;
 
 	private Context() {
 		this(null);
 	}
 
 	private Context(ErrorManager errorManager) {
-		client = new Client();
+		modelManager = new ModelManager () ;
 		loadConf();
 	}
 
