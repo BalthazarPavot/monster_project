@@ -120,6 +120,7 @@ public class ChatManager implements Runnable {
 			adress = loginToAdress.get(login) ;
 			ip = adress.split(" - ")[0] ;
 			port = Integer.parseInt(adress.split(" - ")[1]) ;
+			chatClient.sendMessage(ip, port, message) ;
 			return true ;
 		} else {
 			return false ;
