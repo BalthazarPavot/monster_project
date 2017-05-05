@@ -9,19 +9,43 @@ public class User {
 
     @XmlAttribute
 	private String id = null;
-    @XmlAttribute
+	@XmlAttribute
 	private String login = null;
     @XmlAttribute
 	private String email = null;
     @XmlAttribute
 	private String password = null;
 
-	public static User unpackXML(String XML) {
-		return null;
+    public String getId() {
+		return id;
 	}
 
-	public String packXML() {
-		return null;
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public model.Client getClient() {

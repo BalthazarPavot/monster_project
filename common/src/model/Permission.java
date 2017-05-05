@@ -4,22 +4,23 @@ import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Permission {
+
 	@XmlAttribute
-	private Boolean user_write ;
+	private Boolean userWrite ;
     @XmlAttribute
-	private Boolean user_read ;
+	private Boolean userRead ;
     @XmlAttribute
-	private Boolean group_write ;
+	private Boolean groupWrite ;
     @XmlAttribute
-	private Boolean group_read ;
+	private Boolean groupRead ;
     @XmlAttribute
-	private Boolean other_write ;
+	private Boolean otherWrite ;
     @XmlAttribute
-	private Boolean other_read ;
+	private Boolean otherRead ;
 
     @Override
 	public String toString() {
-		return "Permission [user_write=" + user_write + ", user_read=" + user_read + ", group_write=" + group_write
-				+ ", group_read=" + group_read + ", other_write=" + other_write + ", other_read=" + other_read + "]";
+		return "Permission [user_write=" + userWrite + ", user_read=" + userRead + ", group_write=" + groupWrite
+				+ ", group_read=" + groupRead + ", other_write=" + otherWrite + ", other_read=" + otherRead + "]";
 	}
 }
