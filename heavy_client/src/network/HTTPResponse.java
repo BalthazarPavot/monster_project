@@ -1,10 +1,13 @@
 package network;
 
+import org.apache.http.HttpResponse;
+
 public class HTTPResponse {
 
 	static String DEFAULT_CONTEXT = "";
 	static Integer DEFAULT_ERROR_CODE = 200;
 
+	private HttpResponse originalResponse ;
 	private String content = DEFAULT_CONTEXT;
 	private Integer errorCode = DEFAULT_ERROR_CODE;
 
@@ -23,6 +26,7 @@ public class HTTPResponse {
 	public HTTPResponse(Integer errorCode, String content) {
 		this.content = content;
 		this.errorCode = errorCode;
+		originalResponse = null ;
 	}
 
 	public String getContent() {
@@ -48,5 +52,13 @@ public class HTTPResponse {
 	@Override
 	public String toString() {
 		return "HTTPResponse [errorCode=" + errorCode + ", content=" + content + "]";
+	}
+
+	public HttpResponse getOriginalResponse() {
+		return originalResponse;
+	}
+
+	public void setOriginalResponse(HttpResponse originalResponse) {
+		this.originalResponse = originalResponse;
 	}
 }
