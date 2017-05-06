@@ -22,8 +22,8 @@ import metadata.Context;
 public class Client {
 
 	static private String USER_AGENT = "HeavyClient1.0 - Monster Project";
-	static private String LOGIN_URL = "login";
-	static private String REGISTER_URL = "register";
+	static private String LOGIN_URL = "user/login";
+	static private String REGISTER_URL = "user/new";
 	static private String LOGGED_USERS_URL = "project/users/{{project_id}}/{{format}}";
 	private String protocol = "http";
 
@@ -34,7 +34,7 @@ public class Client {
 		HTTPResponse http_response = new HTTPResponse();
 
 		request.addHeader("User-Agent", USER_AGENT);
-		HttpResponse response;
+		HttpResponse response = null;
 		try {
 			response = client.execute(request);
 			http_response.setErrorCode(response.getStatusLine().getStatusCode());
@@ -49,6 +49,7 @@ public class Client {
 			Context.singleton.setSilencedError(e);
 			http_response.setErrorCode(0);
 		}
+		http_response.setOriginalResponse(response);
 		return http_response;
 	}
 
@@ -65,7 +66,7 @@ public class Client {
 			urlParameters.add(new BasicNameValuePair(key, parameters.get(key)));
 		}
 		post.setEntity(new UrlEncodedFormEntity(urlParameters));
-		HttpResponse response;
+		HttpResponse response = null ;
 		try {
 			response = client.execute(post);
 			http_response.setErrorCode(response.getStatusLine().getStatusCode());
@@ -80,6 +81,7 @@ public class Client {
 			Context.singleton.setSilencedError(e);
 			http_response.setErrorCode(0);
 		}
+		http_response.setOriginalResponse(response);
 		return http_response;
 	}
 
@@ -101,7 +103,19 @@ public class Client {
 	}
 
 	public HTTPResponse getLoggedUsers(String project_id) throws UnsupportedEncodingException {
-		return sendGetRequest(getConnectedUsersURL(project_id));
+		HashMap<String, String> parameters = new HashMap<>();
+
+		if (Context.singleton.user.isConnected()) {
+			parameters.put("id", Context.singleton.user.getId()) ;
+			parameters.put("type", "heavy") ;
+			parameters.put("ip", Context.singleton.getClientIP()) ;
+			parameters.put("port", Context.singleton.getClientPort().toString()) ;
+			return sendPostRequest(getConnectedUsersURL(project_id), parameters);
+		} else {
+			HTTPResponse response = new HTTPResponse();
+			response.setErrorCode(401);
+			return response ;
+		}
 	}
 
 	public HTTPResponse sendServerLoginRequest(String login, String password) {
