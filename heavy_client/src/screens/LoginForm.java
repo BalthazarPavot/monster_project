@@ -14,6 +14,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import metadata.Context;
+import model.User;
+import network.HTTPResponse;
 
 public class LoginForm extends JDialog implements ActionListener {
 
@@ -76,10 +78,14 @@ public class LoginForm extends JDialog implements ActionListener {
 	}
 
 	private void login() {
+		HTTPResponse response ;
+		User mappedUser = null ;
 		login = new String(loginField.getText());
 		password = new String(passwordField.getPassword());
-		if (context.client.sendServerLoginRequest(login, password).getErrorCode() == 200) {
-			context.user.setConnected(login);
+		response = context.client.sendServerLoginRequest(login, password);
+		if (response.getErrorCode() == 200) {
+			mappedUser = context.modelManager.mapUser (response.getContent()) ;
+			context.user.setConnected(mappedUser);
 			dispose();
 		} else {
 			JOptionPane.showMessageDialog(parent, "Invalid password. Try again.", "Error Message",
