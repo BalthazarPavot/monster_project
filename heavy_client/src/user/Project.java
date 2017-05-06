@@ -2,7 +2,7 @@ package user;
 
 public class Project {
 
-	private String ID = "none";
+	private String ID = "1";
 	private String name = "untitled";
 	private Boolean WriteUser = false;
 	private Boolean WriteGroup = false;
