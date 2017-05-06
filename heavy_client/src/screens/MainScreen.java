@@ -46,6 +46,7 @@ public class MainScreen extends Screen {
 	JMenuItem deleteGroup = null;
 	public ChatManager chatManager = null;
 	public Thread chatManagerThread = null;
+	private HashMap<String, JTextArea> discussionPannelText = new HashMap<String, JTextArea> ();
 
 	public MainScreen() {
 		super();
@@ -310,18 +311,32 @@ public class MainScreen extends Screen {
 		JPanel discussionPanel = new JPanel();
 		JTextArea wholeTextArea = new JTextArea();
 		JTextArea textArea = new JTextArea();
-		if (discussionPannelTabs.containsKey(userName) == false) {
+		if (hasDiscussionTab(userName) == false) {
 			discussionPannel.addTab(userName, discussionPanel);
 			discussionPannelTabs.put(userName, discussionPanel);
+			discussionPannelText.put(userName, wholeTextArea);
 			discussionPanel.setLayout(new BorderLayout());
 			discussionPanel.add(textArea, BorderLayout.SOUTH);
 			discussionPanel.add(new JScrollPane(wholeTextArea), BorderLayout.CENTER);
 			wholeTextArea.setEditable(false);
 			wholeTextArea.setFont(new Font("Serif", Font.PLAIN, 15));
+			wholeTextArea.setWrapStyleWord(true) ;
 			wholeTextArea.setLineWrap(true);
 			textArea.setFont(new Font("Serif", Font.PLAIN, 15));
 			textArea.addKeyListener(new TextAreaListener(wholeTextArea, textArea, this, userName));
 		}
+	}
+
+	public boolean hasDiscussionTab(String userName) {
+		return discussionPannelTabs.containsKey(userName);
+	}
+
+	public void addMessageToDiscussionTab(String tabName, String sender, String message) {
+		if (discussionPannelText.containsKey(tabName))
+			discussionPannelText.get(tabName).append(String.format("<%s>: %s\n",
+					sender, message));
+		else 
+			System.err.println("Unknown tab: "+tabName);
 	}
 
 }
@@ -376,13 +391,13 @@ class TextAreaListener implements KeyListener {
 
 	private JTextArea area;
 	private JTextArea input;
-	private MainScreen scren;
+	private MainScreen screen;
 	private String target;
 
 	TextAreaListener(JTextArea area, JTextArea input, MainScreen scren, String target) {
 		this.area = area;
 		this.input = input;
-		this.scren = scren;
+		this.screen = scren;
 		this.target = target;
 	}
 
@@ -390,10 +405,12 @@ class TextAreaListener implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			e.consume();
-			if (scren.chatManager.sendMessageTo(target, input.getText())) {
-				area.append(String.format("<%s>: %s\n", Context.singleton.user.getLogin(), input.getText()));
+			String login = Context.singleton.user.getLogin();
+			String message = input.getText() ;
+			if (screen.chatManager.sendMessageTo(login, target, message)) {
+				((MainScreen) screen).addMessageToDiscussionTab(target, login, message);
 			} else {
-				area.append(target+ " is not connected anymore.\n");
+				area.append(target + " is not connected anymore.\n");
 			}
 			input.setText("");
 		}
