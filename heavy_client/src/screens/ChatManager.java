@@ -25,16 +25,20 @@ public class ChatManager implements Runnable {
 	private int rate = HEART_BEAT_RATE;
 	public HashMap<String, String> loginToAdress = new HashMap<>();
 	public HashMap<String, String> adressToLogin = new HashMap<>();
-	private MainScreen screen = null ;
+	public MainScreen screen = null;
 
 	public static String formatAdress(String ip, int port) {
 		return String.format("%s - %d", ip, port);
 	}
 
+	public static String buildMessage (String sender, String message) {
+		return String.format("%s - %s", sender, message);
+	}
+
 	public ChatManager(MainScreen screen) {
-		this.screen  = screen ;
+		this.screen = screen;
 		this.chatClient = new ChatClient();
-		this.chatServer = new ChatServer();
+		this.chatServer = new ChatServer(this);
 		chatServerThread = new Thread(chatServer);
 		chatServerThread.start();
 	}
@@ -49,7 +53,8 @@ public class ChatManager implements Runnable {
 		while (running) {
 			try {
 				Thread.sleep(rate);
-				addNewUsers();
+				if (context.user.isConnected())
+					addNewUsers();
 			} catch (InterruptedException e) {
 				context.setSilencedError(e);
 				context.errorManager.info("The chat has been stopped");
@@ -66,7 +71,7 @@ public class ChatManager implements Runnable {
 
 		unloggedUsers.addAll(loginToAdress.keySet());
 		for (User user : users) {
-			if (user.getClient() != null && user.getClient().isHeavy()) {
+			if (user.getClient() != null && user.getClient().isHeavy() && user.getLogin() != context.user.getLogin()) {
 				if (loginToAdress.containsKey(user.getLogin()) == false)
 					addUser(user);
 				loggedUsers.add(user.getLogin());
@@ -79,20 +84,13 @@ public class ChatManager implements Runnable {
 	}
 
 	private void removeUser(String login) {
-		String buttonToRemoveName = "speak_with_" + login ;
-		for (Component button:screen.allUsersTab.getComponents()) {
+		String buttonToRemoveName = "speak_with_" + login;
+		for (Component button : screen.allUsersTab.getComponents()) {
 			if (button.getName().equals(buttonToRemoveName))
 				screen.allUsersTab.remove(button);
 		}
-		/*
-		for (int i=0;i<discussionPannel.getTabCount();i+=1) {
-			Component currentTab = discussionPannel.getTabComponentAt(i) ;
-			if (currentTab.getName().equals(login))
-				discussionPannel.removeTabAt(i);
-		}
-		*/
-		adressToLogin.remove(loginToAdress.get(login)) ;
-		loginToAdress.remove(login) ;
+		adressToLogin.remove(loginToAdress.get(login));
+		loginToAdress.remove(login);
 	}
 
 	private void addUser(User user) {
@@ -112,18 +110,17 @@ public class ChatManager implements Runnable {
 		running = false;
 	}
 
-	public boolean sendMessageTo(String login, String message) {
-		String adress ;
-		String ip ;
-		int port ;
+	public boolean sendMessageTo(String sender, String login, String message) {
+		String adress;
+		String ip;
+		int port;
 		if (loginToAdress.containsKey(login)) {
-			adress = loginToAdress.get(login) ;
-			ip = adress.split(" - ")[0] ;
-			port = Integer.parseInt(adress.split(" - ")[1]) ;
-			chatClient.sendMessage(ip, port, message) ;
-			return true ;
+			adress = loginToAdress.get(login);
+			ip = adress.split(" - ")[0];
+			port = Integer.parseInt(adress.split(" - ")[1]);
+			return chatClient.sendMessage(ip, port, ChatManager.buildMessage(sender, message));
 		} else {
-			return false ;
+			return false;
 		}
 	}
 
