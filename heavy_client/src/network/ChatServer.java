@@ -5,19 +5,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import metadata.Context;
 import screens.ChatManager;
 
 public class ChatServer implements Runnable {
 
-	private HashMap<String, ArrayList<String>> inputMessages = new HashMap<>();
 	private int port;
 
-	public ChatServer() {
+	private ChatManager chatManager = null ;
+
+	public ChatServer(ChatManager chatManager) {
 		port = Context.singleton.getClientPort();
+		this.chatManager = chatManager ;
 	}
 
 	public ChatServer(int port) {
@@ -74,21 +74,19 @@ public class ChatServer implements Runnable {
 		BufferedReader input;
 		InputStreamReader inputReader;
 		String message;
-		String senderIP;
-		int senderPort;
-		String senderIdentifier;
+		String senderLogin ;
 
 		inputReader = null;
 		try {
 			inputReader = new InputStreamReader(connexion.getInputStream());
 			input = new BufferedReader(inputReader);
 			message = buildMessage(input);
-			senderIP = connexion.getInetAddress().getHostAddress();
-			senderPort = connexion.getPort();
-			senderIdentifier = ChatManager.formatAdress (senderIP, senderPort);
-			if (inputMessages.containsKey(senderIdentifier) == false)
-				inputMessages.put(senderIdentifier, new ArrayList<>());
-			inputMessages.get(senderIdentifier).add(message);
+			senderLogin = message.substring(0, message.indexOf(" - ")) ;
+			message = message.substring(message.indexOf(" - ")+3) ;
+			if (chatManager.screen.hasDiscussionTab (senderLogin) == false) {
+				chatManager.screen.addDiscussionTab(senderLogin);
+			}
+			chatManager.screen.addMessageToDiscussionTab(senderLogin, senderLogin, message);
 		} catch (IOException e) {
 			Context.singleton.setSilencedError(e);
 		} finally {
@@ -103,12 +101,10 @@ public class ChatServer implements Runnable {
 	private static String buildMessage(BufferedReader input) {
 		StringBuffer result = new StringBuffer();
 		char[] buffer = new char[4096];
-		int offset = 0;
 
 		try {
-			while (input.read(buffer, offset, 4096) != 0) {
+			while (input.read(buffer, 0, 4096) != -1) {
 				result.append(buffer);
-				offset += 4096;
 			}
 		} catch (IOException e) {
 			Context.singleton.setSilencedError(e);
