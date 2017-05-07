@@ -31,7 +31,8 @@ SELECT "Creating tables ..." AS 'Message : ' ;
 CREATE TABLE `user` (
 	`id` VARCHAR(90) NOT NULL PRIMARY KEY,
 	`pseudo` VARCHAR(32) UNIQUE,
-	`password` VARCHAR(100)
+	`password` VARCHAR(100),
+	`email` VARCHAR(32) UNIQUE
 ) ;
 
 CREATE TABLE `group` (
@@ -58,8 +59,7 @@ CREATE TABLE `document_text` (
 CREATE TABLE `permission` (
 	`id` VARCHAR(90) NOT NULL PRIMARY KEY,
 	`r` BOOLEAN NOT NULL,
-	`w` BOOLEAN NOT NULL,
-	`x` BOOLEAN NOT NULL
+	`w` BOOLEAN NOT NULL
 ) ;
 
 CREATE TABLE `message` (
@@ -95,9 +95,9 @@ CREATE TABLE `message_user` (
 
 
 SELECT "Filling tables ..." AS 'Message : ' ;
-INSERT INTO `user` (`id`, `pseudo`, `password`) VALUES (1, "Miloune", "azertyuiop") ;
-INSERT INTO `user` (`id`, `pseudo`, `password`) VALUES (2, "ToBal", "qsdfghjklm") ;
-INSERT INTO `user` (`id`, `pseudo`, `password`) VALUES (3, "Moi", "wxcvbn");
+INSERT INTO `user` (`id`, `pseudo`, `password`, `email`) VALUES (1, "Miloune", "azertyuiop", "orefefikj@ij") ;
+INSERT INTO `user` (`id`, `pseudo`, `password`, `email`) VALUES (2, "ToBal", "qsdfghjklm", "oikefj@ij") ;
+INSERT INTO `user` (`id`, `pseudo`, `password`, `email`) VALUES (3, "Moi", "wxcvbn", "oizdzdkj@ij");
 
 INSERT INTO `group` (`id`, `id_owner`, `name`) VALUES (1, 1, "MiTo") ;
 INSERT INTO `group` (`id`, `id_owner`, `name`) VALUES (2, 2, "ToMoi") ;
@@ -112,8 +112,8 @@ INSERT INTO `document` (`id`, `id_owner`, `name`) VALUES (1, 3, "Mondocument") ;
 INSERT INTO `document_text` (`id`, `id_parent`, `content`) VALUES (1, 1, 
 "Badass") ;
 
-INSERT INTO `permission` (`id`, `r`, `w`, `x`) VALUES (1, 1, 1, 1) ;
-INSERT INTO `permission` (`id`, `r`, `w`, `x`) VALUES (2, 1, 0, 0) ;
+INSERT INTO `permission` (`id`, `r`, `w`) VALUES (1, 1, 1) ;
+INSERT INTO `permission` (`id`, `r`, `w`) VALUES (2, 1, 0) ;
 
 INSERT INTO `permission_document_user` (`id_permission`, `id_document`, `id_user`)
 	VALUES (1, 1, 3) ;
@@ -122,11 +122,9 @@ INSERT INTO `permission_document_user` (`id_permission`, `id_document`, `id_user
 INSERT INTO `permission_document_user` (`id_permission`, `id_document`, `id_user`)
 	VALUES (2, 1, 2) ;
 
-SELECT `user`.`pseudo`, `document`.`name`, `permission`.`r`, `permission`.`w`, `permission`.`x`, `content`
+/*SELECT `user`.`pseudo`, `document`.`name`, `permission`.`r`, `permission`.`w`, `permission`.`x`, `content`
 	FROM `user`, `document`, `permission`, `permission_document_user`, `document_text` 
 	WHERE `user`.`id` = `permission_document_user`.`id_user` 
 	AND `document`.`id` = `permission_document_user`.`id_document` 
 	AND `permission`.`id` = `permission_document_user`.`id_permission` 
-	AND `document`.`id` = `document_text`.`id_parent` ;
-
-
+	AND `document`.`id` = `document_text`.`id_parent` ;*/
