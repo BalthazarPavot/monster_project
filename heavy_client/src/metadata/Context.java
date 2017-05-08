@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Properties;
 
+import model.Document;
+import model.User;
 import network.Client;
-import user.Project;
-import user.User;
 
 public class Context {
 
@@ -27,16 +27,12 @@ public class Context {
 	private String defaultConfigPath = "/config.conf";
 
 	public User user = new User();
-	public Project project = new Project();
+	public Document document = new Document();
 	public Client client = new Client();
 	final public ErrorManager errorManager = ErrorManager.singleton;
 	public ModelManager modelManager = null ;
 
 	private Context() {
-		this(null);
-	}
-
-	private Context(ErrorManager errorManager) {
 		modelManager = new ModelManager () ;
 		loadConf();
 	}

@@ -154,11 +154,11 @@ public class MainScreen extends Screen {
 	}
 
 	public void setProjectRightsItemProperties() {
-		if (context.project.isLoaded()) {
+		if (context.document.isLoaded()) {
 			projectRights.setToolTipText("Configure project's r/w rights");
 			projectRights.setEnabled(true);
 		} else {
-			projectRights.setEnabled(!false);
+			projectRights.setEnabled(false);
 			projectRights.setToolTipText("No project loaded yet");
 		}
 	}
@@ -345,8 +345,8 @@ public class MainScreen extends Screen {
 		for (Component component: documentPannel.getComponents()) {
 			documentPannel.remove(component) ;
 		}
-		if (context.project.isLoaded()) {
-			documentText = context.project.getContent() ;
+		if (context.document.isLoaded()) {
+			documentText = new StringBuilder(context.document.getContent()) ;
 			documentTextArea = new JTextArea() ;
 			documentTextArea.setEditable(true);
 			documentTextArea.setFont(new Font("Serif", Font.PLAIN, 15));
@@ -411,7 +411,7 @@ class MainScreenActionManager implements ActionListener {
 		} else if (action.equals("manage_group")) {
 			new GroupManagingForm(screen).run();
 		} else if (action.equals("delete_group")) {
-			new GroupDeletionForm(screen).run();
+			new GroupDeletionForm(screen).run(new String[]{"test", "test2", "test3"});
 		}
 		((MainScreen) screen).contextUpdatePropagation();
 	}

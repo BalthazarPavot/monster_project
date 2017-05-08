@@ -19,7 +19,6 @@ public class GroupCreationForm extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = -4138179479410716458L;
 	private Context context;
-	private MainScreen parentScreen;
 	private JFrame parent;
 	JTextField nameField = null;
 	String groupName = null ;
@@ -28,7 +27,6 @@ public class GroupCreationForm extends JDialog implements ActionListener {
 		super(Screen.mainFrame, "New Group", true);
 		this.parent = Screen.mainFrame;
 		context = Context.singleton;
-		parentScreen = screen;
 	}
 
 	public void run() {

@@ -57,11 +57,10 @@ public class GroupManagingForm extends JDialog implements ActionListener {
 
 	private void openProject() {
 		HTTPResponse response;
-		model.Document mappedProject = null;
 		response = new HTTPResponse() ;
 		if (response.getErrorCode() == 200) {
-			mappedProject = context.modelManager.mapProject(response.getContent());
-			context.project.loadProject(mappedProject);
+			context.document = context.modelManager.mapProject(response.getContent());
+			context.document.setLoaded();
 			parentScreen.loadProject();
 			dispose();
 		} else {

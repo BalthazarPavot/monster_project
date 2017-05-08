@@ -12,23 +12,25 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 
+
 import metadata.Context;
-import model.Permission;
 
 public class Client {
 
 	static private String USER_AGENT = "HeavyClient1.0 - Monster Project";
 	static private String LOGIN_URL = "user/login";
 	static private String REGISTER_URL = "user/new";
-	static private String LOGGED_USERS_URL = "project/users/{{project_id}}/{{format}}";
+	static private String LOGGED_USERS_URL = "document/users/{{project_id}}/{{format}}";
 	static private String PROJECT_CREATION_URL = "document/new";
 	static private String PROJECT_OPEN_URL = "document/{{owner_name}}/{{document_name}}";
 	static private String NEW_GROUP_URL = "group/new";
+	static private String DELETE_GROUP_URL = "group/{{group_id}}";
 	
 	private String protocol = "http";
 
@@ -36,10 +38,10 @@ public class Client {
 		HttpClient client = HttpClientBuilder.create().build();
 		HttpGet request = new HttpGet(url);
 		StringBuffer result = null;
-		HTTPResponse http_response = new HTTPResponse();
+		network.HTTPResponse http_response = new HTTPResponse();
 
 		request.addHeader("User-Agent", USER_AGENT);
-		HttpResponse response = null;
+		org.apache.http.HttpResponse response = null;
 		try {
 			response = client.execute(request);
 			http_response.setErrorCode(response.getStatusLine().getStatusCode());
@@ -86,7 +88,8 @@ public class Client {
 			Context.singleton.setSilencedError(e);
 			http_response.setErrorCode(0);
 		}
-		http_response.setOriginalResponse(response);
+		http_response.setOriginalResponse(response);;
+		return http_response;
 	}
 
 	public HTTPResponse sendDeleteRequest(String url)
@@ -144,6 +147,10 @@ public class Client {
 
 	private String getCreateGroupURL() {
 		return String.format("%s/%s", getBaseURL(), NEW_GROUP_URL);
+	}
+
+	private String getDeleteGroupURL(String groupId) {
+		return String.format("%s/%s", getBaseURL(), DELETE_GROUP_URL.replace("{{group_id}}", groupId));
 	}
 
 	public HTTPResponse getLoggedUsers(String project_id) throws UnsupportedEncodingException {
@@ -209,11 +216,11 @@ public class Client {
 		return new HTTPResponse(401);
 	}
 
-	public HTTPResponse sendServerConfProjectRequest(Permission perms) {
+	public HTTPResponse sendServerConfProjectRequest(model.Permission perms) {
 		HashMap<String, String> parameters = new HashMap<>();
 		String xmlPermissions ;
 
-		if (Context.singleton.user.isConnected() && Context.singleton.project.isLoaded()) {
+		if (Context.singleton.user.isConnected() && Context.singleton.document.isLoaded()) {
 			xmlPermissions = Context.singleton.modelManager.unmapPermission (perms) ;
 			parameters.put("permissions", xmlPermissions);
 			try {
@@ -233,6 +240,20 @@ public class Client {
 			parameters.put("name", groupName);
 			try {
 				return sendPostRequest(getCreateGroupURL(), parameters);
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		return new HTTPResponse(401);
+	}
+
+	public HTTPResponse sendServerDeleteGroup(String groupName) {
+		model.User user = Context.singleton.user ;
+		model.Group group ;
+
+		if (user.isConnected() && (group = user.getGroup(groupName)) != null) {
+			try {
+				return sendDeleteRequest(getDeleteGroupURL(group.getId()));
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}

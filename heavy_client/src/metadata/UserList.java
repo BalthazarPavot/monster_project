@@ -11,10 +11,10 @@ import model.User;
 
 @XmlRootElement(name = "userlist")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class UserList implements Collection<User> {
+public class UserList implements Collection<model.User> {
 
 	@XmlElement(name = "user")
-	private List<User> users = null;
+	private List<model.User> users = null;
 
 	public UserList () {
 		users = new ArrayList<>() ;

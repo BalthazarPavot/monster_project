@@ -58,7 +58,7 @@ public class HTTPResponse {
 		return originalResponse;
 	}
 
-	public void setOriginalResponse(HttpResponse originalResponse) {
+	public void setOriginalResponse(org.apache.http.HttpResponse originalResponse) {
 		this.originalResponse = originalResponse;
 	}
 }

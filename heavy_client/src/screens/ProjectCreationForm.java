@@ -68,12 +68,11 @@ public class ProjectCreationForm extends JDialog implements ActionListener {
 
 	private void createProject() {
 		HTTPResponse response;
-		model.Document mappedProject = null;
 		name = new String(nameField.getText());
 		response = context.client.sendServerCreateProjectRequest(name);
 		if (response.getErrorCode() == 200) {
-			mappedProject = context.modelManager.mapProject(response.getContent());
-			context.project.loadProject(mappedProject);
+			context.document = context.modelManager.mapProject(response.getContent());
+			context.document.setLoaded();
 			parentScreen.loadProject();
 			dispose();
 		} else {

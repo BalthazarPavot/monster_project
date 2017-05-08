@@ -72,14 +72,13 @@ public class ProjectConfForm extends JDialog implements ActionListener {
 
 	private void openProject() {
 		HTTPResponse response;
-		model.Document mappedProject = null;
 		model.Permission perms = new Permission() ;
 		perms.setUserWrite(ownerWriteNameField.isSelected());
 		perms.setUserRead(ownerReadNameField.isSelected());
 		response = context.client.sendServerConfProjectRequest(perms);
 		if (response.getErrorCode() == 200) {
-			mappedProject = context.modelManager.mapProject(response.getContent());
-			context.project.loadProject(mappedProject);
+			context.document = context.modelManager.mapProject(response.getContent());
+			context.document.setLoaded();
 			parentScreen.loadProject();
 			dispose();
 		} else {

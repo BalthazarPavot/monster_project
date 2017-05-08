@@ -263,7 +263,7 @@ class LoginUser ():
 if __name__ == "__main__":
 
   urls = (
-    "/project/users/(.*)/(.*)", "GetLoggedUsers",
+    "/document/users/(.*)/(.*)", "GetLoggedUsers",
     "/user/new", "CreateUser",
     "/user/login", "LoginUser",
     )

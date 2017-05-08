@@ -10,7 +10,6 @@ import javax.swing.JButton;
 import metadata.Context;
 import metadata.UserList;
 import model.Client;
-import model.User;
 import network.ChatClient;
 import network.ChatServer;
 
@@ -92,7 +91,7 @@ public class ChatManager implements Runnable {
 		Set<String> unloggedUsers = new HashSet<String>();
 
 		unloggedUsers.addAll(loginToAdress.keySet());
-		for (User user : users) {
+		for (model.User user : users) {
 			if (user.getClient() != null && user.getClient().isHeavy() && user.getLogin().equals(context.user.getLogin()) == false) {
 				if (loginToAdress.containsKey(user.getLogin()) == false)
 					addUser(user);
@@ -115,7 +114,7 @@ public class ChatManager implements Runnable {
 		loginToAdress.remove(login);
 	}
 
-	private void addUser(User user) {
+	private void addUser(model.User user) {
 		JButton userButton = new JButton(user.getLogin());
 		Client client = user.getClient();
 		String clientIentifier = formatAdress(client.getIP(), client.getPort());

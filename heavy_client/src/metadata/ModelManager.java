@@ -6,15 +6,12 @@ import java.io.UnsupportedEncodingException;
 
 import javax.xml.bind.*;
 
-import model.Document;
-import model.Permission;
-import model.User;
 import network.HTTPResponse;
 
 public class ModelManager {
 
 	public UserList getLoggedUsers() {
-		return getLoggedUsers(Context.singleton.project.getID());
+		return getLoggedUsers(Context.singleton.document.getId());
 	}
 
 	public UserList getLoggedUsers(String project_id) {
@@ -47,7 +44,7 @@ public class ModelManager {
 		return null;
 	}
 
-	public User mapUser(String content) {
+	public model.User mapUser(String content) {
 		JAXBContext jc = null;
 
 		try {
@@ -60,7 +57,7 @@ public class ModelManager {
 		return null;
 	}
 
-	public Document mapProject(String content) {
+	public model.Document mapProject(String content) {
 		JAXBContext jc = null;
 
 		try {
@@ -73,7 +70,7 @@ public class ModelManager {
 		return null;
 	}
 
-	public String unmapPermission(Permission perms) {
+	public String unmapPermission(model.Permission perms) {
 		JAXBContext jc = null;
 		StringWriter result = new StringWriter();
 
