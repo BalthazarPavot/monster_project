@@ -30,9 +30,9 @@ SET FOREIGN_KEY_CHECKS = 1 ;
 SELECT "Creating tables ..." AS 'Message : ' ;
 CREATE TABLE `user` (
 	`id` VARCHAR(90) NOT NULL PRIMARY KEY,
-	`pseudo` VARCHAR(32) UNIQUE,
-	`password` VARCHAR(100),
-	`email` VARCHAR(32) UNIQUE
+	`pseudo` VARCHAR(32) NOT NULL UNIQUE,
+	`password` VARCHAR(100) NOT NULL,
+	`email` VARCHAR(32) NOT NULL UNIQUE
 ) ;
 
 CREATE TABLE `group` (
