@@ -1,10 +1,13 @@
 package metadata;
 
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
 import javax.xml.bind.*;
 
+import model.Document;
+import model.Permission;
 import model.User;
 import network.HTTPResponse;
 
@@ -55,6 +58,33 @@ public class ModelManager {
 			Context.singleton.setSilencedError(e);
 		}
 		return null;
+	}
+
+	public Document mapProject(String content) {
+		JAXBContext jc = null;
+
+		try {
+			jc = JAXBContext.newInstance(model.Document.class);
+			Unmarshaller unmarshaller = jc.createUnmarshaller();
+			return (model.Document) unmarshaller.unmarshal(new StringReader(content));
+		} catch (JAXBException e) {
+			Context.singleton.setSilencedError(e);
+		}
+		return null;
+	}
+
+	public String unmapPermission(Permission perms) {
+		JAXBContext jc = null;
+		StringWriter result = new StringWriter();
+
+		try {
+			jc = JAXBContext.newInstance(model.Document.class);
+			Marshaller marshaller = jc.createMarshaller();
+			marshaller.marshal(perms, result);
+		} catch (JAXBException e) {
+			Context.singleton.setSilencedError(e);
+		}
+		return result.toString();
 	}
 
 }
