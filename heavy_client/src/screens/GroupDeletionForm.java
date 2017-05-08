@@ -3,10 +3,13 @@ package screens;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -17,57 +20,61 @@ public class GroupDeletionForm extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = -790662379848118627L;
 	private Context context;
-	private MainScreen parentScreen;
 	private JFrame parent;
+	private ArrayList<JCheckBox> boxes = new ArrayList<>();
 
 	public GroupDeletionForm(MainScreen screen) {
-		super(Screen.mainFrame, "Login", true);
+		super(Screen.mainFrame, "Group deletion", true);
 		this.parent = Screen.mainFrame;
 		context = Context.singleton;
-		parentScreen = screen;
 	}
 
-	public void run() {
-		JPanel panel = new JPanel(new GridLayout(3, 2));
-		JButton okButton = new JButton("OK");
+	public void run(String[] groups) {
+		JPanel panel = new JPanel(new GridLayout(0, 2));
+		JButton okButton = new JButton("Delete");
 		JButton cancelButton = new JButton("Cancel");
-
-		setBounds(0, 0, 300, 125);
 
 		okButton.addActionListener(this);
 		cancelButton.addActionListener(this);
 		okButton.setActionCommand("OK");
 		cancelButton.setActionCommand("Cancel");
 
+		for (String group : groups) {
+			JCheckBox box = new JCheckBox();
+			panel.add(new JLabel(group));
+			box.setActionCommand(group);
+			boxes.add(box);
+			panel.add(box);
+		}
 
 		panel.add(okButton);
 		panel.add(cancelButton);
 		getContentPane().add(panel);
 		setLocationRelativeTo(parent);
+		pack();
 		setVisible(true);
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if (cmd.equals("OK")) {
-			openProject();
+			deleteGroups();
 		} else if (cmd.equals("Cancel"))
 			dispose();
 	}
 
-	private void openProject() {
+	private void deleteGroups() {
 		HTTPResponse response;
-		model.Document mappedProject = null;
-		response = new HTTPResponse();
-		if (response.getErrorCode() == 200) {
-			mappedProject = context.modelManager.mapProject(response.getContent());
-			context.project.loadProject(mappedProject);
-			parentScreen.loadProject();
-			dispose();
-		} else {
-			JOptionPane.showMessageDialog(parent, "Invalid password. Try again.", "Error Message",
-					JOptionPane.ERROR_MESSAGE);
+		for (JCheckBox box : boxes) {
+			if (box.isSelected()) {
+				response = context.client.sendServerDeleteGroup (box.getActionCommand());
+				if (response.getErrorCode() != 200) {
+					JOptionPane.showMessageDialog(parent, "Could not delete the group " + box.getActionCommand(),
+							"Error Message", JOptionPane.ERROR_MESSAGE);
+				}
+			}
 		}
+		dispose();
 	}
 
 }
