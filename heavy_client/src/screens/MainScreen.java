@@ -1,6 +1,7 @@
 package screens;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -30,6 +31,8 @@ public class MainScreen extends Screen {
 	private static final long serialVersionUID = 2643713053880588518L;
 	JTabbedPane discussionPannel = null;
 	JPanel documentPannel = null;
+	StringBuilder documentText = null;
+	JTextArea documentTextArea = null;
 	HashMap<String, JPanel> discussionPannelTabs = new HashMap<String, JPanel>();
 	HashMap<String, JComponent> statusBarComponents = new HashMap<>();
 	JPanel allUsersTab = new JPanel(false);
@@ -155,7 +158,7 @@ public class MainScreen extends Screen {
 			projectRights.setToolTipText("Configure project's r/w rights");
 			projectRights.setEnabled(true);
 		} else {
-			projectRights.setEnabled(false);
+			projectRights.setEnabled(!false);
 			projectRights.setToolTipText("No project loaded yet");
 		}
 	}
@@ -336,6 +339,22 @@ public class MainScreen extends Screen {
 			discussionPannelText.get(tabName).append(String.format("<%s>: %s\n", sender, message));
 		else
 			System.err.println("Unknown tab: " + tabName);
+	}
+
+	public void loadProject() {
+		for (Component component: documentPannel.getComponents()) {
+			documentPannel.remove(component) ;
+		}
+		if (context.project.isLoaded()) {
+			documentText = context.project.getContent() ;
+			documentTextArea = new JTextArea() ;
+			documentTextArea.setEditable(true);
+			documentTextArea.setFont(new Font("Serif", Font.PLAIN, 15));
+			documentTextArea.setWrapStyleWord(true);
+			documentTextArea.setLineWrap(true);
+			documentPannel.add(documentTextArea);
+			documentTextArea.setText(documentText.toString());
+		}
 	}
 
 }
