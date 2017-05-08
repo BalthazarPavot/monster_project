@@ -17,6 +17,7 @@ import network.ChatServer;
 public class ChatManager implements Runnable {
 
 	private boolean running = true;
+	public static final String messageSeparator = " - ";
 	static private Integer HEART_BEAT_RATE = 500;
 	private Context context = Context.singleton;
 	private ChatClient chatClient = null;
@@ -31,16 +32,37 @@ public class ChatManager implements Runnable {
 		return String.format("%s - %d", ip, port);
 	}
 
-	public static String buildMessage (String sender, String message) {
-		return String.format("%s - %s", sender, message);
+	public static String buildMessage(String sender, String message) {
+		return String.format("%s" + messageSeparator + "%s", sender, message);
 	}
 
 	public ChatManager(MainScreen screen) {
 		this.screen = screen;
+		if (context.user.isConnected())
+			this.launchChatServer();
+	}
+
+	public void launchChatServer() {
+		Context.singleton.errorManager.info("Launching the chat...");
 		this.chatClient = new ChatClient();
 		this.chatServer = new ChatServer(this);
 		chatServerThread = new Thread(chatServer);
 		chatServerThread.start();
+		Context.singleton.errorManager.info("Launched.");
+	}
+
+	public void stopChatServer() {
+		Context.singleton.errorManager.info("Stopping the chat...");
+		chatServer.stop();
+		chatServerThread.interrupt();
+		try {
+			chatServerThread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			Context.singleton.errorManager.info("Unacceptable error. Quitting the application.");
+			System.exit(1);
+		}
+		Context.singleton.errorManager.info("Stopped.");
 	}
 
 	public int getRate() {
@@ -49,7 +71,7 @@ public class ChatManager implements Runnable {
 
 	@Override
 	public void run() {
-		context.errorManager.info("The chat has started");
+		context.errorManager.info("The chat manager has started.");
 		while (running) {
 			try {
 				Thread.sleep(rate);
@@ -57,7 +79,7 @@ public class ChatManager implements Runnable {
 					addNewUsers();
 			} catch (InterruptedException e) {
 				context.setSilencedError(e);
-				context.errorManager.info("The chat has been stopped");
+				context.errorManager.info("The chat has been interrupted.");
 				return;
 			}
 
@@ -71,7 +93,7 @@ public class ChatManager implements Runnable {
 
 		unloggedUsers.addAll(loginToAdress.keySet());
 		for (User user : users) {
-			if (user.getClient() != null && user.getClient().isHeavy() && user.getLogin() != context.user.getLogin()) {
+			if (user.getClient() != null && user.getClient().isHeavy() && user.getLogin().equals(context.user.getLogin()) == false) {
 				if (loginToAdress.containsKey(user.getLogin()) == false)
 					addUser(user);
 				loggedUsers.add(user.getLogin());
