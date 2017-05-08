@@ -1,25 +1,34 @@
 package user;
 
+import model.Document;
+
 public class Project {
 
 	private String ID = "1";
 	private String name = "untitled";
-	private Boolean WriteUser = false;
-	private Boolean WriteGroup = false;
-	private Boolean WriteOther = false;
-	private Boolean ReadUser = false;
-	private Boolean ReadGroup = false;
-	private Boolean ReadOther = false;
+	private StringBuilder content = new StringBuilder();
+	private Boolean writeUser = false;
+	private Boolean writeGroup = false;
+	private Boolean writeOther = false;
+	private Boolean readUser = false;
+	private Boolean readGroup = false;
+	private Boolean readOther = false;
 	private Boolean loaded = false;
 
-	public void setID (String ID) {
-		this.ID = ID ;
-	}
-	public String getID () {
-		return ID ;
+	public void setID(String ID) {
+		this.ID = ID;
 	}
 
-	public void loadProject() {
+	public String getID() {
+		return ID;
+	}
+
+	public void loadProject(Document mappedProject) {
+		name = mappedProject.getName();
+		ID = mappedProject.getId();
+		setContent(new StringBuilder(mappedProject.getContent()));
+		writeUser = mappedProject.getPermission().getUserWrite();
+		readUser = mappedProject.getPermission().getUserRead();
 		loaded = true;
 	}
 
@@ -36,51 +45,59 @@ public class Project {
 	}
 
 	public Boolean getWriteUser() {
-		return WriteUser;
+		return writeUser;
 	}
 
 	public void setWriteUser(Boolean writeUser) {
-		WriteUser = writeUser;
+		this.writeUser = writeUser;
 	}
 
 	public Boolean getWriteGroup() {
-		return WriteGroup;
+		return writeGroup;
 	}
 
 	public void setWriteGroup(Boolean writeGroup) {
-		WriteGroup = writeGroup;
+		this.writeGroup = writeGroup;
 	}
 
 	public Boolean getWriteOther() {
-		return WriteOther;
+		return writeOther;
 	}
 
 	public void setWriteOther(Boolean writeOther) {
-		WriteOther = writeOther;
+		this.writeOther = writeOther;
 	}
 
 	public Boolean getReadUser() {
-		return ReadUser;
+		return readUser;
 	}
 
 	public void setReadUser(Boolean readUser) {
-		ReadUser = readUser;
+		this.readUser = readUser;
 	}
 
 	public Boolean getReadGroup() {
-		return ReadGroup;
+		return readGroup;
 	}
 
 	public void setReadGroup(Boolean readGroup) {
-		ReadGroup = readGroup;
+		this.readGroup = readGroup;
 	}
 
 	public Boolean getReadOther() {
-		return ReadOther;
+		return readOther;
 	}
 
 	public void setReadOther(Boolean readOther) {
-		ReadOther = readOther;
+		this.readOther = readOther;
+	}
+
+	public StringBuilder getContent() {
+		return content;
+	}
+
+	public void setContent(StringBuilder content) {
+		this.content = content;
 	}
 
 }
