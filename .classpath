@@ -2,5 +2,16 @@
 <classpath>
 	<classpathentry kind="src" path="heavy_client/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="heavy_client/lib/common.jar"/>
+	<classpathentry kind="lib" path="heavy_client/lib/commons-codec-1.9.jar"/>
+	<classpathentry kind="lib" path="heavy_client/lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="heavy_client/lib/fluent-hc-4.5.3.jar"/>
+	<classpathentry kind="lib" path="heavy_client/lib/httpclient-4.5.3.jar"/>
+	<classpathentry kind="lib" path="heavy_client/lib/httpclient-cache-4.5.3.jar"/>
+	<classpathentry kind="lib" path="heavy_client/lib/httpclient-win-4.5.3.jar"/>
+	<classpathentry kind="lib" path="heavy_client/lib/httpcore-4.4.6.jar"/>
+	<classpathentry kind="lib" path="heavy_client/lib/httpmime-4.5.3.jar"/>
+	<classpathentry kind="lib" path="heavy_client/lib/jna-4.1.0.jar"/>
+	<classpathentry kind="lib" path="heavy_client/lib/jna-platform-4.1.0.jar"/>
 	<classpathentry kind="output" path="heavy_client/bin"/>
 </classpath>
