@@ -5,12 +5,15 @@ import javax.xml.bind.annotation.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Client {
 
+	final static String HEAVY = "heavy" ;
+	final static String LIGHT = "light" ;
+
 	@XmlAttribute
-    private String type ;
+    private String type = new String (LIGHT);
     @XmlAttribute
-    private String IP ;
+    private String IP = "";
     @XmlAttribute
-    private Integer port ;
+    private Integer port = 0;
 
 	public String getType() {
 		return type;
@@ -37,7 +40,7 @@ public class Client {
 	}
 
 	public boolean isHeavy () {
-		return type.equalsIgnoreCase("heavy") ;
+		return type.equalsIgnoreCase(LIGHT) ;
 	}
 
     @Override

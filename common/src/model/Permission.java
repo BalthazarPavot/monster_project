@@ -6,19 +6,19 @@ import javax.xml.bind.annotation.*;
 public class Permission {
 
 	@XmlAttribute
-	private Boolean userWrite ;
+	private Boolean userWrite = true;
 	@XmlAttribute
-	private Boolean userRead ;
-    @XmlAttribute
-	private Boolean groupWrite ;
-    @XmlAttribute
-	private Boolean groupRead ;
-    @XmlAttribute
-	private Boolean otherWrite ;
-    @XmlAttribute
-	private Boolean otherRead ;
+	private Boolean userRead = true;
+	@XmlAttribute
+	private Boolean groupWrite = true;
+	@XmlAttribute
+	private Boolean groupRead = true;
+	@XmlAttribute
+	private Boolean otherWrite = false;
+	@XmlAttribute
+	private Boolean otherRead = false;
 
-    public Boolean getUserWrite() {
+	public Boolean getUserWrite() {
 		return userWrite;
 	}
 
@@ -66,7 +66,7 @@ public class Permission {
 		this.otherRead = otherRead;
 	}
 
-    @Override
+	@Override
 	public String toString() {
 		return "Permission [user_write=" + userWrite + ", user_read=" + userRead + ", group_write=" + groupWrite
 				+ ", group_read=" + groupRead + ", other_write=" + otherWrite + ", other_read=" + otherRead + "]";
