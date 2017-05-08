@@ -7,7 +7,7 @@ public class Permission {
 
 	@XmlAttribute
 	private Boolean userWrite ;
-    @XmlAttribute
+	@XmlAttribute
 	private Boolean userRead ;
     @XmlAttribute
 	private Boolean groupWrite ;
@@ -17,6 +17,54 @@ public class Permission {
 	private Boolean otherWrite ;
     @XmlAttribute
 	private Boolean otherRead ;
+
+    public Boolean getUserWrite() {
+		return userWrite;
+	}
+
+	public void setUserWrite(Boolean userWrite) {
+		this.userWrite = userWrite;
+	}
+
+	public Boolean getUserRead() {
+		return userRead;
+	}
+
+	public void setUserRead(Boolean userRead) {
+		this.userRead = userRead;
+	}
+
+	public Boolean getGroupWrite() {
+		return groupWrite;
+	}
+
+	public void setGroupWrite(Boolean groupWrite) {
+		this.groupWrite = groupWrite;
+	}
+
+	public Boolean getGroupRead() {
+		return groupRead;
+	}
+
+	public void setGroupRead(Boolean groupRead) {
+		this.groupRead = groupRead;
+	}
+
+	public Boolean getOtherWrite() {
+		return otherWrite;
+	}
+
+	public void setOtherWrite(Boolean otherWrite) {
+		this.otherWrite = otherWrite;
+	}
+
+	public Boolean getOtherRead() {
+		return otherRead;
+	}
+
+	public void setOtherRead(Boolean otherRead) {
+		this.otherRead = otherRead;
+	}
 
     @Override
 	public String toString() {
