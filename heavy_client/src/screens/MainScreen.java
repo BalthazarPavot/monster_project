@@ -381,6 +381,18 @@ class MainScreenActionManager implements ActionListener {
 			screen.chatManager.stopChatServer();
 		} else if (action.matches("^speak_with_.*$")) {
 			screen.addDiscussionTab(action.substring(11, action.length()));
+		} else if (action.equals("create_project")) {
+			new ProjectCreationForm(screen).run();
+		} else if (action.equals("open_project")) {
+			new ProjectOpeningForm(screen).run();
+		} else if (action.equals("project_conf")) {
+			new ProjectConfForm(screen).run();
+		} else if (action.equals("new_group")) {
+			new GroupCreationForm(screen).run();
+		} else if (action.equals("manage_group")) {
+			new GroupManagingForm(screen).run();
+		} else if (action.equals("delete_group")) {
+			new GroupDeletionForm(screen).run();
 		}
 		((MainScreen) screen).contextUpdatePropagation();
 	}
