@@ -28,11 +28,13 @@ public class RegisterForm extends JDialog implements ActionListener {
 	private String verifPassword;
 	private String email;
 	private JFrame parent;
+	private MainScreen parentScreen;
 
-	public RegisterForm() {
+	public RegisterForm(MainScreen screen) {
 		super(Screen.mainFrame, "Register", true);
 		this.parent = Screen.mainFrame;
 		context = Context.singleton;
+		parentScreen = screen;
 	}
 
 	public void run() {
@@ -86,14 +88,14 @@ public class RegisterForm extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if (cmd.equals("OK")) {
-			login();
+			register();
 			passwordField.selectAll();
 			passwordField.requestFocusInWindow();
 		} else if (cmd.equals("Cancel"))
 			dispose();
 	}
 
-	private void login() {
+	private void register() {
 		login = new String(loginField.getText());
 		password = new String(passwordField.getPassword());
 		verifPassword = new String(verifPasswordField.getPassword());
@@ -104,8 +106,9 @@ public class RegisterForm extends JDialog implements ActionListener {
 		else {
 			if (context.client.sendServerRegisterRequest(login, password, email).getErrorCode() == 200) {
 				context.user.setConnected(login);
+				parentScreen.chatManager.launchChatServer();
 				dispose();
-			} else {	
+			} else {
 				JOptionPane.showMessageDialog(parent, "Unexpected error occured", "Error Message",
 						JOptionPane.ERROR_MESSAGE);
 			}

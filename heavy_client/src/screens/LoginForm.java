@@ -26,11 +26,13 @@ public class LoginForm extends JDialog implements ActionListener {
 	private String login;
 	private String password;
 	private JFrame parent;
+	private MainScreen parentScreen;
 
-	public LoginForm() {
+	public LoginForm(MainScreen screen) {
 		super(Screen.mainFrame, "Login", true);
 		this.parent = Screen.mainFrame;
 		context = Context.singleton;
+		parentScreen = screen;
 	}
 
 	public void run() {
@@ -78,14 +80,15 @@ public class LoginForm extends JDialog implements ActionListener {
 	}
 
 	private void login() {
-		HTTPResponse response ;
-		User mappedUser = null ;
+		HTTPResponse response;
+		User mappedUser = null;
 		login = new String(loginField.getText());
 		password = new String(passwordField.getPassword());
 		response = context.client.sendServerLoginRequest(login, password);
 		if (response.getErrorCode() == 200) {
-			mappedUser = context.modelManager.mapUser (response.getContent()) ;
+			mappedUser = context.modelManager.mapUser(response.getContent());
 			context.user.setConnected(mappedUser);
+			parentScreen.chatManager.launchChatServer();
 			dispose();
 		} else {
 			JOptionPane.showMessageDialog(parent, "Invalid password. Try again.", "Error Message",
