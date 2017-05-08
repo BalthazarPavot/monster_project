@@ -46,7 +46,7 @@ public class MainScreen extends Screen {
 	JMenuItem deleteGroup = null;
 	public ChatManager chatManager = null;
 	public Thread chatManagerThread = null;
-	private HashMap<String, JTextArea> discussionPannelText = new HashMap<String, JTextArea> ();
+	private HashMap<String, JTextArea> discussionPannelText = new HashMap<String, JTextArea>();
 
 	public MainScreen() {
 		super();
@@ -320,7 +320,7 @@ public class MainScreen extends Screen {
 			discussionPanel.add(new JScrollPane(wholeTextArea), BorderLayout.CENTER);
 			wholeTextArea.setEditable(false);
 			wholeTextArea.setFont(new Font("Serif", Font.PLAIN, 15));
-			wholeTextArea.setWrapStyleWord(true) ;
+			wholeTextArea.setWrapStyleWord(true);
 			wholeTextArea.setLineWrap(true);
 			textArea.setFont(new Font("Serif", Font.PLAIN, 15));
 			textArea.addKeyListener(new TextAreaListener(wholeTextArea, textArea, this, userName));
@@ -333,10 +333,9 @@ public class MainScreen extends Screen {
 
 	public void addMessageToDiscussionTab(String tabName, String sender, String message) {
 		if (discussionPannelText.containsKey(tabName))
-			discussionPannelText.get(tabName).append(String.format("<%s>: %s\n",
-					sender, message));
-		else 
-			System.err.println("Unknown tab: "+tabName);
+			discussionPannelText.get(tabName).append(String.format("<%s>: %s\n", sender, message));
+		else
+			System.err.println("Unknown tab: " + tabName);
 	}
 
 }
@@ -349,38 +348,39 @@ public class MainScreen extends Screen {
  */
 class MainScreenActionManager implements ActionListener {
 
-	protected Screen screen = null;
+	protected MainScreen screen = null;
 
 	public MainScreenActionManager(Screen screen) {
-		this.screen = screen;
+		this.screen = (MainScreen) screen;
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
 		if (action.equals("exit")) {
 			screen.nextScreenID = ScreenGenerator.QUIT_SCREEN;
-			((MainScreen) screen).chatManager.end();
-			while (((MainScreen) screen).chatManagerThread.isAlive()) {
+			screen.chatManager.end();
+			while (screen.chatManagerThread.isAlive()) {
 				try {
-					((MainScreen) screen).chatManagerThread.join(((MainScreen) screen).chatManager.getRate());
+					screen.chatManagerThread.join(screen.chatManager.getRate());
 				} catch (InterruptedException e1) {
 					Context.singleton.setSilencedError(e1);
 				}
 				try {
-					Thread.sleep(((MainScreen) screen).chatManager.getRate());
+					Thread.sleep(screen.chatManager.getRate());
 				} catch (InterruptedException e2) {
 					Context.singleton.setSilencedError(e2);
 				}
 			}
 			screen.screenTermination();
 		} else if (action.equals("connect_user")) {
-			new LoginForm().run();
+			new LoginForm(screen).run();
 		} else if (action.equals("register_user")) {
-			new RegisterForm().run();
+			new RegisterForm(screen).run();
 		} else if (action.equals("disconnect_user")) {
 			Context.singleton.user.logout();
+			screen.chatManager.stopChatServer();
 		} else if (action.matches("^speak_with_.*$")) {
-			((MainScreen) screen).addDiscussionTab(action.substring(11, action.length()));
+			screen.addDiscussionTab(action.substring(11, action.length()));
 		}
 		((MainScreen) screen).contextUpdatePropagation();
 	}
@@ -406,7 +406,7 @@ class TextAreaListener implements KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			e.consume();
 			String login = Context.singleton.user.getLogin();
-			String message = input.getText() ;
+			String message = input.getText();
 			if (screen.chatManager.sendMessageTo(login, target, message)) {
 				((MainScreen) screen).addMessageToDiscussionTab(target, login, message);
 			} else {
