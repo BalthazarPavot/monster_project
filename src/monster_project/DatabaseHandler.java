@@ -14,6 +14,10 @@ public class DatabaseHandler {
 
 	private Connection conn;
 
+	public Connection getConn() {
+		return conn;
+	}
+
 	public DatabaseHandler() {
 		try {
 			Class.forName(DRIVER_CLASS);
