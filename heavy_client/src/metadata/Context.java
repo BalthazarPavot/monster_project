@@ -4,8 +4,11 @@ import java.awt.Dimension;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.Scanner;
 
 import model.Document;
 import model.User;
@@ -111,8 +114,8 @@ public class Context {
 				loadConf(options.get("config"), true);
 			}
 			loadOptions(options);
-			// } else {
-			// runTestServer("../test");
+		} else {
+			runTestServer("../test");
 		}
 	}
 
@@ -181,10 +184,13 @@ public class Context {
 			pb.directory(new File(option));
 		try {
 			serverProcess = pb.start();
+			inheritIO(serverProcess.getInputStream(), System.err);
+			inheritIO(serverProcess.getErrorStream(), System.err);
 			if (serverPort == null)
 				errorManager.info("Not launched...");
 			else
 				errorManager.info("Launched.");
+			serverProcess.getOutputStream();
 		} catch (IOException e) {
 			e.printStackTrace();
 			errorManager.setError(e);
@@ -301,4 +307,14 @@ public class Context {
 		}
 	}
 
+	private static void inheritIO(final InputStream src, final PrintStream dest) {
+		new Thread(new Runnable() {
+			public void run() {
+				Scanner sc = new Scanner(src);
+				while (sc.hasNextLine()) {
+					dest.println(sc.nextLine());
+				}
+			}
+		}).start();
+	}
 }
