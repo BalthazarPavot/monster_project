@@ -81,6 +81,7 @@ public class MainScreen extends JPanel {
 	protected void initScreen() {
 		setLayout(new BorderLayout());
 		MainScreen.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		MainScreen.mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		MainScreen.mainFrame.getContentPane().add(this);
 		MainScreen.mainFrame.setBounds(0, 0, context.getDimension().width, context.getDimension().height);
 		this.screenHasFinished = false;
