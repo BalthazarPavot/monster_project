@@ -2,6 +2,7 @@ package model;
 
 import javax.xml.bind.annotation.*;
 
+@XmlRootElement(name = "document")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Document {
 
@@ -68,6 +69,6 @@ public class Document {
 	}
 
 	public void setLoaded() {
-		loaded = true ;
+		loaded = true;
 	}
 }
