@@ -40,7 +40,7 @@ public class Client {
 	}
 
 	public boolean isHeavy () {
-		return type.equalsIgnoreCase(LIGHT) ;
+		return type.equalsIgnoreCase(HEAVY) ;
 	}
 
     @Override
