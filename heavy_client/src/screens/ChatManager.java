@@ -92,7 +92,8 @@ public class ChatManager implements Runnable {
 
 		unloggedUsers.addAll(loginToAdress.keySet());
 		for (model.User user : users) {
-			if (user.getClient() != null && user.getClient().isHeavy() && user.getLogin().equals(context.user.getLogin()) == false) {
+			if (user.getClient() != null && user.getClient().isHeavy()
+					&& user.getLogin().equals(context.user.getLogin()) == false) {
 				if (loginToAdress.containsKey(user.getLogin()) == false)
 					addUser(user);
 				loggedUsers.add(user.getLogin());
