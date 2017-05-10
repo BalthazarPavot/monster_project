@@ -30,6 +30,12 @@ import javax.swing.event.DocumentListener;
 
 import metadata.Context;
 
+/**
+ * Class representing the window of the heavy client.
+ * 
+ * @author Balthazar Pavot
+ *
+ */
 public class MainScreen extends JPanel {
 
 	public static final String LOGIN_FEATURE = "You must be logged to use this feature. Use our website or press 'alt-R' to create an account.";
@@ -115,6 +121,9 @@ public class MainScreen extends JPanel {
 		screenTermination();
 	}
 
+	/**
+	 * Removes all the components from the window and terminates it.
+	 */
 	public void screenTermination() {
 		for (Component widget : widgetList)
 			this.remove(widget);
@@ -124,6 +133,9 @@ public class MainScreen extends JPanel {
 		screenHasFinished = true;
 	}
 
+	/**
+	 * Creates the whole winfow
+	 */
 	public void prepare() {
 		prepareMenuBar();
 		JSplitPane documentContainer = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, prepareTextPanel(),
@@ -136,6 +148,11 @@ public class MainScreen extends JPanel {
 		chatManagerThread.start();
 	}
 
+	/**
+	 * Creates the discussion panel
+	 * 
+	 * @return
+	 */
 	private JTabbedPane prepareDiscussionPannel() {
 		Dimension discussionPannelDimensions = new Dimension();
 		discussionPannel = new JTabbedPane();
@@ -146,6 +163,11 @@ public class MainScreen extends JPanel {
 		return discussionPannel;
 	}
 
+	/**
+	 * Creates the document panel
+	 * 
+	 * @return
+	 */
 	private JPanel prepareTextPanel() {
 		documentPannel = new JPanel();
 
@@ -155,6 +177,9 @@ public class MainScreen extends JPanel {
 		return documentPannel;
 	}
 
+	/**
+	 * Creates the menues' bar
+	 */
 	private void prepareMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
 		prepareMenuBarFile(menuBar);
@@ -162,6 +187,11 @@ public class MainScreen extends JPanel {
 
 	}
 
+	/**
+	 * Creates the file menu.
+	 * 
+	 * @param menuBar
+	 */
 	private void prepareMenuBarFile(JMenuBar menuBar) {
 		JMenu file = new JMenu("Projects");
 		JMenu user = new JMenu("User");
@@ -177,6 +207,11 @@ public class MainScreen extends JPanel {
 		menuBar.add(group);
 	}
 
+	/**
+	 * Create the file menu.'s items
+	 * 
+	 * @param file
+	 */
 	private void prepareMenuBarFileItem(JMenu file) {
 		buildNewProjectItem(file);
 		buildOpenProjectItem(file);
@@ -184,6 +219,11 @@ public class MainScreen extends JPanel {
 		buildExitItem(file);
 	}
 
+	/**
+	 * Create the button to create new projects.
+	 * 
+	 * @param file
+	 */
 	private void buildNewProjectItem(JMenu file) {
 		newProject = new JMenuItem("New project", KeyEvent.VK_N);
 		setNewProjectItemProperties();
@@ -193,6 +233,9 @@ public class MainScreen extends JPanel {
 		file.add(newProject);
 	}
 
+	/**
+	 * Set the properties of the button to set the project's properties
+	 */
 	private void setNewProjectItemProperties() {
 		if (context.user.isConnected()) {
 			newProject.setToolTipText("Create a new document");
@@ -203,6 +246,11 @@ public class MainScreen extends JPanel {
 		}
 	}
 
+	/**
+	 * Creates the button to open a project.
+	 * 
+	 * @param file
+	 */
 	private void buildOpenProjectItem(JMenu file) {
 		openProject = new JMenuItem("Open project", KeyEvent.VK_O);
 		openProject.getAccessibleContext().setAccessibleDescription("Open an existing document");
@@ -212,6 +260,11 @@ public class MainScreen extends JPanel {
 		file.add(openProject);
 	}
 
+	/**
+	 * Creates the button to manage the project's rights
+	 * 
+	 * @param file
+	 */
 	private void buildProjectRightsItem(JMenu file) {
 		projectRights = new JMenuItem("Project Config.", KeyEvent.VK_C);
 		setProjectRightsItemProperties();
@@ -221,6 +274,9 @@ public class MainScreen extends JPanel {
 		file.add(projectRights);
 	}
 
+	/**
+	 * Sets the project properties button proprties
+	 */
 	public void setProjectRightsItemProperties() {
 		if (context.document.isLoaded()) {
 			projectRights.setToolTipText("Configure project's r/w rights");
@@ -231,6 +287,11 @@ public class MainScreen extends JPanel {
 		}
 	}
 
+	/**
+	 * Crestes the exit button
+	 * 
+	 * @param file
+	 */
 	private void buildExitItem(JMenu file) {
 		exit = new JMenuItem("Exit", KeyEvent.VK_X);
 		exit.getAccessibleContext().setAccessibleDescription("Exit the application");
@@ -240,12 +301,22 @@ public class MainScreen extends JPanel {
 		file.add(exit);
 	}
 
+	/**
+	 * Create the user menu.
+	 * 
+	 * @param user
+	 */
 	private void prepareMenuBarUserItem(JMenu user) {
 		buildConnectUserItem(user);
 		buildDisconnectUserItem(user);
 		buildCreateUserItem(user);
 	}
 
+	/**
+	 * Creates the button to connect.
+	 * 
+	 * @param user
+	 */
 	private void buildConnectUserItem(JMenu user) {
 		connect = new JMenuItem("Connect", KeyEvent.VK_C);
 		setConnectUserItemProperties();
@@ -255,6 +326,9 @@ public class MainScreen extends JPanel {
 		user.add(connect);
 	}
 
+	/**
+	 * Sets the connexion button"s properties.
+	 */
 	private void setConnectUserItemProperties() {
 		if (context.user.isConnected()) {
 			connect.setEnabled(false);
@@ -265,6 +339,11 @@ public class MainScreen extends JPanel {
 		}
 	}
 
+	/**
+	 * Creates the disconnect button.
+	 * 
+	 * @param user
+	 */
 	private void buildDisconnectUserItem(JMenu user) {
 		disconnect = new JMenuItem("Disconnect", KeyEvent.VK_D);
 		setDisconnectUserItemProperties();
@@ -274,6 +353,9 @@ public class MainScreen extends JPanel {
 		user.add(disconnect);
 	}
 
+	/**
+	 * sets the properties of the button to disconnect.
+	 */
 	private void setDisconnectUserItemProperties() {
 		if (context.user.isConnected()) {
 			disconnect.setToolTipText("Disconnects you");
@@ -284,6 +366,11 @@ public class MainScreen extends JPanel {
 		}
 	}
 
+	/**
+	 * Creates the button to register.
+	 * 
+	 * @param user
+	 */
 	private void buildCreateUserItem(JMenu user) {
 		createUser = new JMenuItem("New User", KeyEvent.VK_R);
 		createUser.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.ALT_MASK));
@@ -293,12 +380,22 @@ public class MainScreen extends JPanel {
 		user.add(createUser);
 	}
 
+	/**
+	 * Creates the group menu
+	 * 
+	 * @param group
+	 */
 	private void prepareMenuBarGroupItem(JMenu group) {
 		buildNewGroupItem(group);
 		buildManageGroupItem(group);
 		buildDeleteGroupItem(group);
 	}
 
+	/**
+	 * Creates the button for the group creation.
+	 * 
+	 * @param group
+	 */
 	private void buildNewGroupItem(JMenu group) {
 		newGroup = new JMenuItem("New Group", KeyEvent.VK_N);
 		setNewGroupItemProperties();
@@ -307,6 +404,9 @@ public class MainScreen extends JPanel {
 		group.add(newGroup);
 	}
 
+	/**
+	 * Set the properties of the group creation button.
+	 */
 	private void setNewGroupItemProperties() {
 		if (context.user.isConnected()) {
 			newGroup.setToolTipText("Create a new group");
@@ -317,6 +417,11 @@ public class MainScreen extends JPanel {
 		}
 	}
 
+	/**
+	 * Crreates the manage group button.
+	 * 
+	 * @param group
+	 */
 	private void buildManageGroupItem(JMenu group) {
 		manageGroup = new JMenuItem("Manage Group", KeyEvent.VK_M);
 		setManageGroupItemProperties();
@@ -326,6 +431,9 @@ public class MainScreen extends JPanel {
 		group.add(manageGroup);
 	}
 
+	/**
+	 * Set the properties of the manage group button
+	 */
 	private void setManageGroupItemProperties() {
 		if (context.user.isConnected()) {
 			manageGroup.setToolTipText("Add users to this group");
@@ -336,6 +444,11 @@ public class MainScreen extends JPanel {
 		}
 	}
 
+	/**
+	 * Creates the button to delete a group.
+	 * 
+	 * @param group
+	 */
 	private void buildDeleteGroupItem(JMenu group) {
 		deleteGroup = new JMenuItem("Delete Group", KeyEvent.VK_D);
 		setDeleteGroupItemProperties();
@@ -344,6 +457,9 @@ public class MainScreen extends JPanel {
 		group.add(deleteGroup);
 	}
 
+	/**
+	 * Set the delete group button"s properties.
+	 */
 	private void setDeleteGroupItemProperties() {
 		if (context.user.isConnected()) {
 			deleteGroup.setToolTipText("Disolve one of your groups");
@@ -354,6 +470,9 @@ public class MainScreen extends JPanel {
 		}
 	}
 
+	/**
+	 * Creates the status bar
+	 */
 	private void prepareStatusBar() {
 		JLabel connectedLabel = new JLabel();
 		statusBar.setBorder(new BevelBorder(BevelBorder.LOWERED));
@@ -362,11 +481,17 @@ public class MainScreen extends JPanel {
 		updateStatusBar();
 	}
 
+	/**
+	 * Updates the status bar telling if we are logged or not.
+	 */
 	private void updateStatusBar() {
 		((JLabel) statusBarComponents.get("connected")).setText(context.user.isConnected()
 				? String.format("Connected as %s", context.user.getLogin()) : "Not Connected");
 	}
 
+	/**
+	 * Updates the menus (when login, logout, open or close a document)
+	 */
 	public void contextUpdatePropagation() {
 		setNewProjectItemProperties();
 		setProjectRightsItemProperties();
@@ -378,6 +503,12 @@ public class MainScreen extends JPanel {
 		updateStatusBar();
 	}
 
+	/**
+	 * Creates a new discussion tab with the given name into the discussion
+	 * pannel.
+	 * 
+	 * @param userName
+	 */
 	public void addDiscussionTab(String userName) {
 		JPanel discussionPanel = new JPanel();
 		JTextArea wholeTextArea = new JTextArea();
@@ -398,10 +529,23 @@ public class MainScreen extends JPanel {
 		}
 	}
 
+	/**
+	 * talls if a tab with this name is already opened.
+	 * 
+	 * @param userName
+	 * @return
+	 */
 	public boolean hasDiscussionTab(String userName) {
 		return discussionPannelTabs.containsKey(userName);
 	}
 
+	/**
+	 * Add the given message to the good tab.
+	 * 
+	 * @param tabName
+	 * @param sender
+	 * @param message
+	 */
 	public void addMessageToDiscussionTab(String tabName, String sender, String message) {
 		if (discussionPannelText.containsKey(tabName))
 			discussionPannelText.get(tabName).append(String.format("<%s>: %s\n", sender, message));
@@ -409,6 +553,9 @@ public class MainScreen extends JPanel {
 			System.err.println("Unknown tab: " + tabName);
 	}
 
+	/**
+	 * Loads the curent project into the window
+	 */
 	public void loadProject() {
 		for (Component component : documentPannel.getComponents()) {
 			documentPannel.remove(component);
@@ -433,10 +580,17 @@ public class MainScreen extends JPanel {
 		}
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public String getDocumentContent() {
 		return documentTextArea.getText();
 	}
 
+	/**
+	 * @param content
+	 */
 	public void setDocumentContent(String content) {
 		documentListener.nocatch = true;
 		documentTextArea.setText(content);
@@ -446,7 +600,7 @@ public class MainScreen extends JPanel {
 }
 
 /**
- * Manage the actions of the buttons.
+ * Manage the actions of the buttons from the menus.
  * 
  * @author Balthazar Pavot
  *
@@ -459,6 +613,9 @@ class MainScreenActionManager implements ActionListener {
 		this.screen = screen;
 	}
 
+	/**
+	 * Listens to all the actions from the menus.
+	 */
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
 		if (action.equals("exit")) {
@@ -503,6 +660,12 @@ class MainScreenActionManager implements ActionListener {
 
 }
 
+/**
+ * A class listening to changes into the chat entry.
+ * 
+ * @author Balthazar Pavot
+ *
+ */
 class TextAreaListener implements KeyListener {
 
 	private JTextArea area;
@@ -517,6 +680,9 @@ class TextAreaListener implements KeyListener {
 		this.target = target;
 	}
 
+	/**
+	 * Send the message if enter is pressed.
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -539,6 +705,12 @@ class TextAreaListener implements KeyListener {
 	}
 }
 
+/**
+ * A class listening all the changements into the document.
+ * 
+ * @author Balthazar Pavot
+ *
+ */
 class DocumentTextListener implements DocumentListener {
 
 	private MainScreen mainScreen = null;
@@ -548,16 +720,22 @@ class DocumentTextListener implements DocumentListener {
 		this.mainScreen = mainScreen;
 	}
 
+	/**
+	 * Tells the document manager that an insertion has occured.
+	 */
 	@Override
 	public void insertUpdate(DocumentEvent e) {
 		if (nocatch)
 			return;
 		int offset = e.getOffset();
 		int length = e.getLength();
-		String content = mainScreen.getDocumentContent().substring(offset,  offset+length) ;
+		String content = mainScreen.getDocumentContent().substring(offset, offset + length);
 		mainScreen.documentManager.sendInsert(offset, length, content);
 	}
 
+	/**
+	 * Tells the document manager that a remove has occured.
+	 */
 	@Override
 	public void removeUpdate(DocumentEvent e) {
 		if (nocatch)

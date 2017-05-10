@@ -13,6 +13,13 @@ import model.Client;
 import network.ChatClient;
 import network.ChatServer;
 
+/**
+ * The chat manager is the interface between the screen, and the chat's client
+ * and the chat's server.
+ * 
+ * @author Balthazar Pavot
+ *
+ */
 public class ChatManager implements Runnable {
 
 	private boolean running = true;
@@ -27,20 +34,42 @@ public class ChatManager implements Runnable {
 	public HashMap<String, String> adressToLogin = new HashMap<>();
 	public MainScreen screen = null;
 
+	/**
+	 * Formates the adress like "ip - port".
+	 * 
+	 * @param ip
+	 * @param port
+	 * @return
+	 */
 	public static String formatAdress(String ip, int port) {
 		return String.format("%s - %d", ip, port);
 	}
 
+	/**
+	 * Build a message by adding the sender login to the beginning of the
+	 * message.
+	 * 
+	 * @param sender
+	 * @param message
+	 * @return
+	 */
 	public static String buildMessage(String sender, String message) {
 		return String.format("%s" + messageSeparator + "%s", sender, message);
 	}
 
+	/**
+	 * 
+	 * @param screen
+	 */
 	public ChatManager(MainScreen screen) {
 		this.screen = screen;
 		if (context.user.isConnected())
 			this.launchChatServer();
 	}
 
+	/**
+	 * runs the chat server.
+	 */
 	public void launchChatServer() {
 		Context.singleton.errorManager.info("Launching the chat...");
 		this.chatClient = new ChatClient();
@@ -50,6 +79,9 @@ public class ChatManager implements Runnable {
 		Context.singleton.errorManager.info("Launched.");
 	}
 
+	/**
+	 * Stops the chat server.
+	 */
 	public void stopChatServer() {
 		Context.singleton.errorManager.info("Stopping the chat...");
 		chatServer.stop();
@@ -64,10 +96,18 @@ public class ChatManager implements Runnable {
 		Context.singleton.errorManager.info("Stopped.");
 	}
 
+	/**
+	 * Returns the rate at which we get the new users.
+	 * 
+	 * @return
+	 */
 	public int getRate() {
 		return rate;
 	}
 
+	/**
+	 * Run the chat manager.
+	 */
 	@Override
 	public void run() {
 		context.errorManager.info("The chat manager has started.");
@@ -85,6 +125,10 @@ public class ChatManager implements Runnable {
 		}
 	}
 
+	/**
+	 * Get the connected users, add the new ones to the chat and remove the old
+	 * ones.
+	 */
 	private void addNewUsers() {
 		UserList users = context.modelManager.getLoggedUsers();
 		Set<String> loggedUsers = new HashSet<String>();
@@ -105,6 +149,11 @@ public class ChatManager implements Runnable {
 		}
 	}
 
+	/**
+	 * Remove an old user from the chat.
+	 * 
+	 * @param login
+	 */
 	private void removeUser(String login) {
 		String buttonToRemoveName = "speak_with_" + login;
 		for (Component button : screen.allUsersTab.getComponents()) {
@@ -115,6 +164,11 @@ public class ChatManager implements Runnable {
 		loginToAdress.remove(login);
 	}
 
+	/**
+	 * Add a new user to the chat.
+	 * 
+	 * @param user
+	 */
 	private void addUser(model.User user) {
 		JButton userButton = new JButton(user.getLogin());
 		Client client = user.getClient();
@@ -128,10 +182,21 @@ public class ChatManager implements Runnable {
 		userButton.setActionCommand("speak_with_" + user.getLogin());
 	}
 
+	/**
+	 * stop the chat manager.
+	 */
 	public void end() {
 		running = false;
 	}
 
+	/**
+	 * uses the chat client to send a message to the asked person.
+	 * 
+	 * @param sender
+	 * @param login
+	 * @param message
+	 * @return
+	 */
 	public boolean sendMessageTo(String sender, String login, String message) {
 		String adress;
 		String ip;

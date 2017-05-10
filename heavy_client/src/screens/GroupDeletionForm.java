@@ -16,6 +16,12 @@ import javax.swing.JPanel;
 import metadata.Context;
 import network.HTTPResponse;
 
+/**
+ * A group deletion window
+ * 
+ * @author Balthazar Pavot
+ *
+ */
 public class GroupDeletionForm extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = -790662379848118627L;
@@ -23,12 +29,21 @@ public class GroupDeletionForm extends JDialog implements ActionListener {
 	private JFrame parent;
 	private ArrayList<JCheckBox> boxes = new ArrayList<>();
 
+	/**
+	 * 
+	 * @param screen
+	 */
 	public GroupDeletionForm(MainScreen screen) {
 		super(MainScreen.mainFrame, "Group deletion", true);
 		this.parent = MainScreen.mainFrame;
 		context = Context.singleton;
 	}
 
+	/**
+	 * runs the roup deletion form
+	 * 
+	 * @param groups
+	 */
 	public void run(String[] groups) {
 		JPanel panel = new JPanel(new GridLayout(0, 2));
 		JButton okButton = new JButton("Delete");
@@ -55,6 +70,9 @@ public class GroupDeletionForm extends JDialog implements ActionListener {
 		setVisible(true);
 	}
 
+	/**
+	 * 
+	 */
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if (cmd.equals("OK")) {
@@ -63,11 +81,14 @@ public class GroupDeletionForm extends JDialog implements ActionListener {
 			dispose();
 	}
 
+	/**
+	 * Send the form to the server.
+	 */
 	private void deleteGroups() {
 		HTTPResponse response;
 		for (JCheckBox box : boxes) {
 			if (box.isSelected()) {
-				response = context.client.sendServerDeleteGroup (box.getActionCommand());
+				response = context.client.sendServerDeleteGroup(box.getActionCommand());
 				if (response.getErrorCode() != 200) {
 					JOptionPane.showMessageDialog(parent, "Could not delete the group " + box.getActionCommand(),
 							"Error Message", JOptionPane.ERROR_MESSAGE);

@@ -10,10 +10,19 @@ import network.HTTPResponse;
 
 public class ModelManager {
 
+    /**
+     * Returns all the users logged for the curent project.
+     * @return
+     */
 	public UserList getLoggedUsers() {
 		return getLoggedUsers(Context.singleton.document.getId());
 	}
 
+    /**
+     * Returns all the users logged for the given project.
+     * @param project_id
+     * @return
+     */
 	public UserList getLoggedUsers(String project_id) {
 		UserList users = new UserList();
 		HTTPResponse response = null;
@@ -31,6 +40,11 @@ public class ModelManager {
 		return users;
 	}
 
+    /**
+     * Creates a list of users from their xml representation.
+     * @param response
+     * @return
+     */
 	private UserList extractUserList(HTTPResponse response) {
 		JAXBContext jc = null;
 
@@ -44,6 +58,11 @@ public class ModelManager {
 		return null;
 	}
 
+    /**
+     * Creates a user instance from its xml representation.
+     * @param content
+     * @return
+     */
 	public model.User mapUser(String content) {
 		JAXBContext jc = null;
 
@@ -57,6 +76,11 @@ public class ModelManager {
 		return null;
 	}
 
+    /**
+     * Creates a Document instance from its xml representation.
+     * @param content
+     * @return
+     */
 	public model.Document mapProject(String content) {
 		JAXBContext jc = null;
 
@@ -70,10 +94,19 @@ public class ModelManager {
 		return null;
 	}
 
+    /**
+     * unmap the codument from the context.
+     * @return
+     */
 	public String unmapDocument() {
 		return unmapDocument(Context.singleton.document);
 	}
 
+    /**
+     * Takes a document as input and outputs its xml representation.
+     * @param doc
+     * @return
+     */
 	public String unmapDocument(model.Document doc) {
 		JAXBContext jc = null;
 		StringWriter result = new StringWriter();
@@ -88,6 +121,11 @@ public class ModelManager {
 		return result.toString();
 	}
 
+    /**
+     * Takes a permission as inut and outputs its xml representation.
+     * @param perms
+     * @return
+     */
 	public String unmapPermission(model.Permission perms) {
 		JAXBContext jc = null;
 		StringWriter result = new StringWriter();

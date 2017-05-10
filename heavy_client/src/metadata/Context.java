@@ -14,14 +14,19 @@ import model.Document;
 import model.User;
 import network.Client;
 
+/**
+ * This class contains the global context in which the whole program is
+ * executed. It also contains the configuration and the parameters.
+ * 
+ * @author Balthazar Pavot
+ *
+ */
 public class Context {
 
 	static public Context singleton = new Context();
 
 	final private static String TEST_SERVER_NAME = "simulateServer.py";
 	final private static String TEST_SERVER_DYIRECTORY = "test";
-	// final private static String TEST_SERVER_PATH = String.join("/",
-	// new String[] { TEST_SERVER_NAME, TEST_SERVER_DYIRECTORY });
 	private String serverIP = "127.0.0.1";
 	private Integer serverPort = 8520;
 	private String serverAdress = String.format("%s:%d", serverIP, serverPort);
@@ -29,7 +34,6 @@ public class Context {
 	private Integer clientPort = 8521;
 	private String clientAdress = String.format("%s:%d", clientIP, clientPort);
 	private Boolean confLoaded = false;
-	private boolean running = true;
 	private Dimension screenDimensions = new Dimension(640, 480);
 	private String defaultConfigPath = "/config.conf";
 
@@ -40,6 +44,9 @@ public class Context {
 	public ModelManager modelManager = null;
 	private Process serverProcess = null;
 
+	/**
+	 * 
+	 */
 	private Context() {
 		modelManager = new ModelManager();
 		loadConf();
@@ -72,6 +79,11 @@ public class Context {
 		}
 	}
 
+	/**
+	 * Set the current error.
+	 * 
+	 * @param error
+	 */
 	public void setError(Exception error) {
 		try {
 			setError(error, false);
@@ -82,28 +94,37 @@ public class Context {
 		}
 	}
 
+	/**
+	 * Set the curent error and warns the user it has been silenced.
+	 * 
+	 * @param error
+	 */
 	public void setSilencedError(Exception error) {
 		errorManager.setError(error);
 		errorManager.silenceError();
 	}
 
+	/**
+	 * Set the curent error and throws the exception if "raise" parameter's
+	 * value is true
+	 * 
+	 * @param error
+	 * @param raise
+	 * @throws Exception
+	 */
 	public void setError(Exception error, Boolean raise) throws Exception {
 		this.errorManager.setError(error);
 		if (raise) {
-			setRunning(false);
 			errorManager.throwError();
 		} else
 			errorManager.silenceError();
 	}
 
-	public void setRunning(boolean running) {
-		this.running = running;
-	}
-
-	public boolean isRunning() {
-		return running;
-	}
-
+	/**
+	 * Loads the configuration using the command line inputs.
+	 * 
+	 * @param args
+	 */
 	public void loadConfiguration(String[] args) {
 		HashMap<String, String> options = null;
 
@@ -114,13 +135,12 @@ public class Context {
 				loadConf(options.get("config"), true);
 			}
 			loadOptions(options);
-		} else {
-			runTestServer("../test");
 		}
 	}
 
 	/**
-	 * Inspirated from
+	 * 
+	 * Parses the command line. Store options in a hash. Inspirated from
 	 * https://stackoverflow.com/questions/7341683/parsing-arguments-to-a-java-command-line-program
 	 * 
 	 * @param args
@@ -151,6 +171,12 @@ public class Context {
 		return options;
 	}
 
+	/**
+	 * Executes the functions triggered by the options and apply the other
+	 * options.
+	 * 
+	 * @param options
+	 */
 	private void loadOptions(HashMap<String, String> options) {
 		String value = null;
 		for (String option : options.keySet()) {
@@ -174,6 +200,13 @@ public class Context {
 		}
 	}
 
+	/**
+	 * Runs the python server (simulateServer.py). Redirects its outputs to this
+	 * program's outputs.
+	 * (called if --run_test_server is given)
+	 * 
+	 * @param option
+	 */
 	private void runTestServer(String option) {
 		ProcessBuilder pb = null;
 		errorManager.info("Launching the test server");
@@ -197,49 +230,93 @@ public class Context {
 		}
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public Dimension getDimension() {
 		return screenDimensions;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public String getServerAdress() {
 		return serverAdress;
 	}
 
+    /**
+     * 
+     * @return
+     */
 	public String getServerIP() {
 		return serverIP;
 	}
 
+    /**
+     * 
+     * @param serverIP
+     */
 	public void setServerIP(String serverIP) {
 		this.serverIP = serverIP;
 		serverAdress = String.format("%s:%d", serverIP, serverPort);
 	}
 
+    /**
+     * 
+     * @return
+     */
 	public Integer getServerPort() {
 		return serverPort;
 	}
 
+    /**
+     * 
+     * @param serverPort
+     */
 	public void setServerPort(Integer serverPort) {
 		this.serverPort = serverPort;
 		serverAdress = String.format("%s:%d", serverIP, serverPort);
 	}
 
+    /**
+     * 
+     * @return
+     */
 	public String getClientAdress() {
 		return clientAdress;
 	}
 
+    /**
+     * 
+     * @return
+     */
 	public String getClientIP() {
 		return clientIP;
 	}
 
+    /**
+     * 
+     * @param clientIP
+     */
 	public void setClientIP(String clientIP) {
 		this.clientIP = clientIP;
 		clientAdress = String.format("%s:%d", clientIP, clientPort);
 	}
 
+    /**
+     * 
+     * @return
+     */
 	public Integer getClientPort() {
 		return clientPort;
 	}
 
+    /**
+     * 
+     * @param clientPort
+     */
 	public void setClientPort(Integer clientPort) {
 		this.clientPort = clientPort;
 		clientAdress = String.format("%s:%d", clientIP, clientPort);
@@ -299,6 +376,9 @@ public class Context {
 			setServerIP(serverIP);
 	}
 
+    /**
+     * Destroy the python server if it has been launched.
+     */
 	public void finish() {
 		if (serverProcess != null) {
 			errorManager.info("Destroying test server...");
@@ -307,6 +387,12 @@ public class Context {
 		}
 	}
 
+	/**
+	 * Make a pipe from src to dest (taken from stackoerflow)
+	 * 
+	 * @param src
+	 * @param dest
+	 */
 	private static void inheritIO(final InputStream src, final PrintStream dest) {
 		new Thread(new Runnable() {
 			public void run() {
@@ -314,6 +400,7 @@ public class Context {
 				while (sc.hasNextLine()) {
 					dest.println(sc.nextLine());
 				}
+				sc.close () ; // never reached
 			}
 		}).start();
 	}

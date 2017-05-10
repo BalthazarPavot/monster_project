@@ -15,20 +15,33 @@ import javax.swing.JTextField;
 import metadata.Context;
 import network.HTTPResponse;
 
+/**
+ * A group creation window
+ * 
+ * @author Balthazar Pavot
+ *
+ */
 public class GroupCreationForm extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = -4138179479410716458L;
 	private Context context;
 	private JFrame parent;
 	JTextField nameField = null;
-	String groupName = null ;
+	String groupName = null;
 
+	/**
+	 * 
+	 * @param screen
+	 */
 	public GroupCreationForm(MainScreen screen) {
 		super(MainScreen.mainFrame, "New Group", true);
 		this.parent = MainScreen.mainFrame;
 		context = Context.singleton;
 	}
 
+	/**
+	 * Runs the group creation form
+	 */
 	public void run() {
 		JPanel panel = new JPanel(new GridLayout(2, 2));
 		JButton okButton = new JButton("OK");
@@ -56,6 +69,9 @@ public class GroupCreationForm extends JDialog implements ActionListener {
 		setVisible(true);
 	}
 
+	/**
+	 * 
+	 */
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if (cmd.equals("OK")) {
@@ -64,6 +80,9 @@ public class GroupCreationForm extends JDialog implements ActionListener {
 			dispose();
 	}
 
+	/**
+	 * Send the group creation to the server.
+	 */
 	private void createGroup() {
 		HTTPResponse response;
 		groupName = new String(nameField.getText());

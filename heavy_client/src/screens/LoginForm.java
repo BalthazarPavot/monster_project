@@ -17,6 +17,12 @@ import metadata.Context;
 import model.User;
 import network.HTTPResponse;
 
+/**
+ * A login window
+ * 
+ * @author Balthazar Pavot
+ *
+ */
 public class LoginForm extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 5934372618920115955L;
@@ -35,6 +41,9 @@ public class LoginForm extends JDialog implements ActionListener {
 		parentScreen = screen;
 	}
 
+	/**
+	 * runs the login form
+	 */
 	public void run() {
 		JPanel panel = new JPanel(new GridLayout(3, 2));
 		JButton okButton = new JButton("OK");
@@ -79,6 +88,9 @@ public class LoginForm extends JDialog implements ActionListener {
 			dispose();
 	}
 
+	/**
+	 * Sends the login form to the server.
+	 */
 	private void login() {
 		HTTPResponse response;
 		User mappedUser = null;

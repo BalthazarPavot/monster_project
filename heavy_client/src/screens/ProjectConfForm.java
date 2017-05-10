@@ -16,6 +16,12 @@ import metadata.Context;
 import model.Permission;
 import network.HTTPResponse;
 
+/**
+ * A project configuration window
+ * 
+ * @author Balthazar Pavot
+ *
+ */
 public class ProjectConfForm extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = -4379236881467436012L;
@@ -65,14 +71,14 @@ public class ProjectConfForm extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if (cmd.equals("OK")) {
-			openProject();
+			applyConf();
 		} else if (cmd.equals("Cancel"))
 			dispose();
 	}
 
-	private void openProject() {
+	private void applyConf() {
 		HTTPResponse response;
-		model.Permission perms = new Permission() ;
+		model.Permission perms = new Permission();
 		perms.setUserWrite(ownerWriteNameField.isSelected());
 		perms.setUserRead(ownerReadNameField.isSelected());
 		response = context.client.sendServerConfProjectRequest(perms);

@@ -15,6 +15,12 @@ import javax.swing.JTextField;
 
 import metadata.Context;
 
+
+/**
+ * A registration window.
+ * @author Balthazar Pavot
+ *
+ */
 public class RegisterForm extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 5934372618920115955L;

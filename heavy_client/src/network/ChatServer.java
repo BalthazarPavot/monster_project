@@ -9,6 +9,12 @@ import java.net.Socket;
 import metadata.Context;
 import screens.ChatManager;
 
+/**
+ * The server for the chat
+ * 
+ * @author Balthazar Pavot
+ *
+ */
 public class ChatServer implements Runnable {
 
 	private int port;
@@ -17,19 +23,33 @@ public class ChatServer implements Runnable {
 
 	private boolean serving = false;
 
+	/**
+	 * 
+	 * @param chatManager
+	 */
 	public ChatServer(ChatManager chatManager) {
 		port = Context.singleton.getClientPort();
 		this.chatManager = chatManager;
 	}
 
+	/**
+	 * 
+	 * @param port
+	 */
 	public ChatServer(int port) {
 		this.port = port;
 	}
 
+	/**
+	 * stops the server.
+	 */
 	public void stop() {
 		serving = false;
 	}
 
+	/**
+	 * Launche the server by opening sockets and running the server.
+	 */
 	@Override
 	public void run() {
 		ServerSocket socket;
@@ -50,6 +70,11 @@ public class ChatServer implements Runnable {
 		}
 	}
 
+	/**
+	 * Run the server.
+	 * 
+	 * @param socket
+	 */
 	private void serve(ServerSocket socket) {
 		serving = true;
 		while (serving) {
@@ -57,6 +82,11 @@ public class ChatServer implements Runnable {
 		}
 	}
 
+	/**
+	 * Handle the connexions, one by one.
+	 * 
+	 * @param socket
+	 */
 	private void handleConnexions(ServerSocket socket) {
 		Socket connexion;
 
@@ -84,6 +114,13 @@ public class ChatServer implements Runnable {
 		}
 	}
 
+	/**
+	 * Handle one connexion by extracting the message and send it to the screen.
+	 * 
+	 * @param socket
+	 * @param connexion
+	 * @throws IOException
+	 */
 	private void handleConnexion(ServerSocket socket, Socket connexion) throws IOException {
 		BufferedReader input;
 		InputStreamReader inputReader;
@@ -113,6 +150,12 @@ public class ChatServer implements Runnable {
 		}
 	}
 
+	/**
+	 * rebuilds the message the the socket stream
+	 * 
+	 * @param input
+	 * @return
+	 */
 	private static String buildMessage(BufferedReader input) {
 		StringBuffer result = new StringBuffer();
 		char[] buffer = new char[4096];

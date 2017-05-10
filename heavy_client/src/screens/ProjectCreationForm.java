@@ -15,6 +15,11 @@ import javax.swing.JTextField;
 import metadata.Context;
 import network.HTTPResponse;
 
+/**
+ * A project creation window.
+ * @author Balthazar Pavot
+ *
+ */
 public class ProjectCreationForm extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = -7801960644128920516L;

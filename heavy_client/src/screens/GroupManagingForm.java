@@ -13,6 +13,12 @@ import javax.swing.JPanel;
 import metadata.Context;
 import network.HTTPResponse;
 
+/**
+ * A group management window
+ * 
+ * @author Balthazar Pavot
+ *
+ */
 public class GroupManagingForm extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = -7162886282230894063L;
@@ -27,6 +33,9 @@ public class GroupManagingForm extends JDialog implements ActionListener {
 		parentScreen = screen;
 	}
 
+	/**
+	 * Run the form to open a project.
+	 */
 	public void run() {
 		JPanel panel = new JPanel(new GridLayout(3, 2));
 		JButton okButton = new JButton("OK");
@@ -39,7 +48,6 @@ public class GroupManagingForm extends JDialog implements ActionListener {
 		okButton.setActionCommand("OK");
 		cancelButton.setActionCommand("Cancel");
 
-
 		panel.add(okButton);
 		panel.add(cancelButton);
 		getContentPane().add(panel);
@@ -47,6 +55,9 @@ public class GroupManagingForm extends JDialog implements ActionListener {
 		setVisible(true);
 	}
 
+	/**
+	 * 
+	 */
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		if (cmd.equals("OK")) {
@@ -55,9 +66,12 @@ public class GroupManagingForm extends JDialog implements ActionListener {
 			dispose();
 	}
 
+	/**
+	 * Opens the asked project
+	 */
 	private void openProject() {
 		HTTPResponse response;
-		response = new HTTPResponse() ;
+		response = new HTTPResponse();
 		if (response.getErrorCode() == 200) {
 			context.document = context.modelManager.mapProject(response.getContent());
 			context.document.setLoaded();

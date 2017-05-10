@@ -7,7 +7,8 @@ import metadata.Context;
 import screens.MainScreen;
  
 /**
- * @author lain
+ * The main class. Entry point of the heavy client.
+ * @author Balthazar Pavot
  *
  */
 public class MonsterProject {

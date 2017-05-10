@@ -7,8 +7,20 @@ import java.net.Socket;
 
 import metadata.Context;
 
+/**
+ * The client for the chat.
+ * @author Balthazar Pavot
+ *
+ */
 public class ChatClient {
 
+    /**
+     * Send the given message to the given ip:port.
+     * @param ip
+     * @param port
+     * @param message
+     * @return
+     */
 	public boolean sendMessage(String ip, int port, String message) {
 		Socket socket = new Socket();
 		InetSocketAddress adress = new InetSocketAddress(ip, port);

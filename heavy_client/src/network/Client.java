@@ -21,6 +21,12 @@ import org.apache.http.message.BasicNameValuePair;
 import metadata.Context;
 import model.Document;
 
+/**
+ * The client centralize all the communications with the server.
+ * It also defines the urls.
+ * @author Balthazar Pavot
+ *
+ */
 public class Client {
 
 	static private String USER_AGENT = "HeavyClient1.0 - Monster Project";
@@ -35,6 +41,11 @@ public class Client {
 
 	private String protocol = "http";
 
+    /**
+     * Send a get request to the given url.
+     * @param url
+     * @return
+     */
 	public HTTPResponse sendGetRequest(String url) {
 		HttpClient client = HttpClientBuilder.create().build();
 		HttpGet request = new HttpGet(url);
@@ -61,6 +72,13 @@ public class Client {
 		return http_response;
 	}
 
+    /**
+     * Send a post request to the given url, with the given parameters
+     * @param url
+     * @param parameters
+     * @return
+     * @throws UnsupportedEncodingException
+     */
 	public HTTPResponse sendPostRequest(String url, HashMap<String, String> parameters)
 			throws UnsupportedEncodingException {
 		HttpClient client = HttpClientBuilder.create().build();
@@ -93,6 +111,12 @@ public class Client {
 		return http_response;
 	}
 
+    /**
+     * Send a delete request at the asked url
+     * @param url
+     * @return
+     * @throws UnsupportedEncodingException
+     */
 	public HTTPResponse sendDeleteRequest(String url) throws UnsupportedEncodingException {
 		HttpClient client = HttpClientBuilder.create().build();
 		HttpDelete delete = new HttpDelete(url);
@@ -120,43 +144,89 @@ public class Client {
 		return http_response;
 	}
 
+    /**
+     * 
+     * @return
+     */
 	private String getBaseURL() {
 		return String.format("%s://%s", protocol, Context.singleton.getServerAdress());
 	}
 
+    /**
+     * 
+     * @return
+     */
 	private String getLoginURL() {
 		return String.format("%s/%s", getBaseURL(), LOGIN_URL);
 	}
 
+    /**
+     * 
+     * @return
+     */
 	private String getRegisterURL() {
 		return String.format("%s/%s", getBaseURL(), REGISTER_URL);
 	}
 
+    /**
+     * 
+     * @param project_id
+     * @return
+     */
 	private String getConnectedUsersURL(String project_id) {
 		return String.format("%s/%s", getBaseURL(), LOGGED_USERS_URL);
 	}
 
+    /**
+     * 
+     * @return
+     */
 	private String getCreateProjectURL() {
 		return String.format("%s/%s", getBaseURL(), PROJECT_CREATION_URL);
 	}
 
+    /**
+     * 
+     * @param ownerName
+     * @param projectName
+     * @return
+     */
 	private String getOpenProjectURL(String ownerName, String projectName) {
 		return String.format("%s/%s", getBaseURL(),
 				PROJECT_OPEN_URL.replace("{{owner_name}}", ownerName).replace("{{document_name}}", projectName));
 	}
 
+    /**
+     * 
+     * @return
+     */
 	private String getCreateGroupURL() {
 		return String.format("%s/%s", getBaseURL(), NEW_GROUP_URL);
 	}
 
+    /**
+     * 
+     * @param groupId
+     * @return
+     */
 	private String getDeleteGroupURL(String groupId) {
 		return String.format("%s/%s", getBaseURL(), DELETE_GROUP_URL.replace("{{group_id}}", groupId));
 	}
 
+    /**
+     * 
+     * @return
+     */
 	private String getUpdateDocumentURL() {
 		return String.format("%s/%s", getBaseURL(), UPDATE_DOCUMENT_URL);
 	}
 
+    /**
+     * If the user is connected, ask to the server who else is connected.
+     * @param project_id
+     * @return
+     * @throws UnsupportedEncodingException
+     */
 	public HTTPResponse getLoggedUsers(String project_id) throws UnsupportedEncodingException {
 		HashMap<String, String> parameters = new HashMap<>();
 
@@ -171,6 +241,12 @@ public class Client {
 		}
 	}
 
+    /**
+     * Tell the server to log the user in.
+     * @param login
+     * @param password
+     * @return
+     */
 	public HTTPResponse sendServerLoginRequest(String login, String password) {
 		HashMap<String, String> parameters = new HashMap<>();
 
@@ -184,6 +260,13 @@ public class Client {
 		return new HTTPResponse(401);
 	}
 
+    /**
+     * Tell the server to register a new user.
+     * @param login
+     * @param password
+     * @param email
+     * @return
+     */
 	public HTTPResponse sendServerRegisterRequest(String login, String password, String email) {
 		HashMap<String, String> parameters = new HashMap<>();
 
@@ -199,6 +282,11 @@ public class Client {
 		return new HTTPResponse(401);
 	}
 
+    /**
+     * Tell the server to create a new projet.
+     * @param name
+     * @return
+     */
 	public HTTPResponse sendServerCreateProjectRequest(String name) {
 		HashMap<String, String> parameters = new HashMap<>();
 
@@ -214,10 +302,21 @@ public class Client {
 		return new HTTPResponse(401);
 	}
 
+    /**
+     * Get the whole project giving its name and author.
+     * @param ownerName
+     * @param projectName
+     * @return
+     */
 	public HTTPResponse sendServerOpenProjectRequest(String ownerName, String projectName) {
 		return sendGetRequest(getOpenProjectURL(ownerName, projectName));
 	}
 
+    /**
+     * Tell the server which is the config for the curent project. 
+     * @param perms
+     * @return
+     */
 	public HTTPResponse sendServerConfProjectRequest(model.Permission perms) {
 		HashMap<String, String> parameters = new HashMap<>();
 		String xmlPermissions;
@@ -234,6 +333,11 @@ public class Client {
 		return new HTTPResponse(401);
 	}
 
+    /**
+     * Tell the server to create a new group.
+     * @param groupName
+     * @return
+     */
 	public HTTPResponse sendServerNewGroupRequest(String groupName) {
 		HashMap<String, String> parameters = new HashMap<>();
 
@@ -249,6 +353,11 @@ public class Client {
 		return new HTTPResponse(401);
 	}
 
+    /**
+     * Tell the server to delete the given group.
+     * @param groupName
+     * @return
+     */
 	public HTTPResponse sendServerDeleteGroup(String groupName) {
 		model.User user = Context.singleton.user;
 		model.Group group;
@@ -263,6 +372,11 @@ public class Client {
 		return new HTTPResponse(401);
 	}
 
+    /**
+     * Retrieve the document's content giving its id.
+     * @param documentID
+     * @return
+     */
 	public HTTPResponse getDocumentContent(String documentID) {
 		HashMap<String, String> parameters = new HashMap<>();
 
@@ -275,6 +389,14 @@ public class Client {
 		return new HTTPResponse(401);
 	}
 
+    /**
+     * Send an insertion of text to the server.
+     * @param document
+     * @param offset
+     * @param length
+     * @param content
+     * @return
+     */
 	public HTTPResponse sendInsertDocumentContent(Document document, int offset, int length, String content) {
 		HashMap<String, String> parameters = new HashMap<>();
 
@@ -291,6 +413,13 @@ public class Client {
 		return new HTTPResponse(401);
 	}
 
+    /**
+     * Send a removal of text to the server.
+     * @param document
+     * @param offset
+     * @param length
+     * @return
+     */
 	public HTTPResponse sendRemoveDocumentContent(Document document, int offset, int length) {
 		HashMap<String, String> parameters = new HashMap<>();
 

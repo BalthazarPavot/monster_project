@@ -16,6 +16,11 @@ import metadata.Context;
 import model.Document;
 import network.HTTPResponse;
 
+/**
+ * A project opening window.
+ * @author Balthazar Pavot
+ *
+ */
 public class ProjectOpeningForm extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 3129456875961270839L;
