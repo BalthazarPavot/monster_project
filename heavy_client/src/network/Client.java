@@ -19,6 +19,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 
 import metadata.Context;
+import model.Document;
 
 public class Client {
 
@@ -27,9 +28,10 @@ public class Client {
 	static private String REGISTER_URL = "user/new";
 	static private String LOGGED_USERS_URL = "document/users";
 	static private String PROJECT_CREATION_URL = "document/new";
-	static private String PROJECT_OPEN_URL = "document/ask?owner_name={{owner_name}}&project_name={{document_name}}";
+	static private String PROJECT_OPEN_URL = "document/ask?owner_name={{owner_name}}&document_name={{document_name}}";
 	static private String NEW_GROUP_URL = "group/new";
 	static private String DELETE_GROUP_URL = "group/{{group_id}}";
+	static private String UPDATE_DOCUMENT_URL = "document/up";
 
 	private String protocol = "http";
 
@@ -151,6 +153,10 @@ public class Client {
 		return String.format("%s/%s", getBaseURL(), DELETE_GROUP_URL.replace("{{group_id}}", groupId));
 	}
 
+	private String getUpdateDocumentURL() {
+		return String.format("%s/%s", getBaseURL(), UPDATE_DOCUMENT_URL);
+	}
+
 	public HTTPResponse getLoggedUsers(String project_id) throws UnsupportedEncodingException {
 		HashMap<String, String> parameters = new HashMap<>();
 
@@ -209,9 +215,7 @@ public class Client {
 	}
 
 	public HTTPResponse sendServerOpenProjectRequest(String ownerName, String projectName) {
-		// if (Context.singleton.user.isConnected())
 		return sendGetRequest(getOpenProjectURL(ownerName, projectName));
-		// return new HTTPResponse(401);
 	}
 
 	public HTTPResponse sendServerConfProjectRequest(model.Permission perms) {
@@ -255,6 +259,49 @@ public class Client {
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
+		}
+		return new HTTPResponse(401);
+	}
+
+	public HTTPResponse getDocumentContent(String documentID) {
+		HashMap<String, String> parameters = new HashMap<>();
+
+		parameters.put("document_id", documentID);
+		try {
+			return sendPostRequest(getUpdateDocumentURL(), parameters);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return new HTTPResponse(401);
+	}
+
+	public HTTPResponse sendInsertDocumentContent(Document document, int offset, int length, String content) {
+		HashMap<String, String> parameters = new HashMap<>();
+
+		parameters.put("document_id", document.getId());
+		parameters.put("type", "insert");
+		parameters.put("offset", Integer.toString(offset));
+		parameters.put("length", Integer.toString(length));
+		parameters.put("content", content);
+		try {
+			return sendPostRequest(getUpdateDocumentURL(), parameters);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return new HTTPResponse(401);
+	}
+
+	public HTTPResponse sendRemoveDocumentContent(Document document, int offset, int length) {
+		HashMap<String, String> parameters = new HashMap<>();
+
+		parameters.put("document_id", document.getId());
+		parameters.put("type", "remove");
+		parameters.put("offset", Integer.toString(offset));
+		parameters.put("length", Integer.toString(length));
+		try {
+			return sendPostRequest(getUpdateDocumentURL(), parameters);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
 		return new HTTPResponse(401);
 	}
