@@ -6,7 +6,7 @@ import re
 import web
 import json
 import time
-
+import sys
 import random
 
 
@@ -139,9 +139,7 @@ class Permission ():
 
 class Content ():
 
-  XML_TEMPLATE = """<content>
-    %(text)s
-  </content>"""
+  XML_TEMPLATE = "<content>%(text)s</content>"
 
   def __init__ (self, text=""):
     self.text = text
@@ -149,7 +147,6 @@ class Content ():
   def xml (self):
     return Content.XML_TEMPLATE % self.__dict__
 
-print Document ().xml ()
 ## 
 # Application context and database
 ## 
@@ -164,7 +161,11 @@ class Context ():
       User("3", "user_3", password="12345", email="x@y.z",
         client=Client(type=Client.HEAVY, port=8523, ip="127.0.0.1")),
     ]
-    self.documents = []
+    self.documents = {
+      "doc_1": Document (content=Content ("This is the editable content of the doc no 1")), 
+      "doc_2": Document (content=Content ("This is the editable content of the doc no 2")), 
+      "doc_3": Document (content=Content ("This is the editable content of the doc no 3"))
+    }
 
   def heavy_users (self):
     current_time = int (time.time ())
@@ -259,11 +260,28 @@ class LoginUser ():
     context.users.append (User (**form))
     context.logged_users.append (context.users[-1])
 
+class GetDocument ():
+
+  def POST (self, *args):
+    return
+
+  def GET (self, *args):
+    form = web.input ()
+    doc = context.documents.get (form.get ("project_name", None), None)
+    return doc and doc.xml ()
+
+  def register (self, form):
+    context.users.append (User (**form))
+    context.logged_users.append (context.users[-1])
+
 
 if __name__ == "__main__":
 
+  sys.stdout = sys.stderr
+
   urls = (
-    "/document/users/(.*)/(.*)", "GetLoggedUsers",
+    "/document/users", "GetLoggedUsers",
+    "/document/ask", "GetDocument",
     "/user/new", "CreateUser",
     "/user/login", "LoginUser",
     )
