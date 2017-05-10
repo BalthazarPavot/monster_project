@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import metadata.Context;
+import model.Document;
 import network.HTTPResponse;
 
 public class ProjectOpeningForm extends JDialog implements ActionListener {
@@ -82,8 +83,12 @@ public class ProjectOpeningForm extends JDialog implements ActionListener {
 		response = context.client.sendServerOpenProjectRequest(ownerName, documentName);
 		if (response.getErrorCode() == 200) {
 			context.document = context.modelManager.mapProject(response.getContent());
-			context.document.setLoaded();
-			parentScreen.loadProject();
+			if (context.document == null)
+				context.document = new Document();
+			else {
+				context.document.setLoaded();
+				parentScreen.loadProject();
+			}
 			dispose();
 		} else {
 			JOptionPane.showMessageDialog(parent, "Invalid password. Try again.", "Error Message",
