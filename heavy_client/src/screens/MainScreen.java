@@ -65,6 +65,11 @@ public class MainScreen extends JPanel {
 	public Thread chatManagerThread = null;
 	private HashMap<String, JTextArea> discussionPannelText = new HashMap<String, JTextArea>();
 	Dimension documentPannelDimensions = new Dimension();
+	public DocumentManager documentManager = null;
+
+	private Thread documentManagerThread;
+
+	private DocumentTextListener documentListener = new DocumentTextListener(this);
 
 	public MainScreen() {
 		super();
@@ -417,16 +422,25 @@ public class MainScreen extends JPanel {
 			documentTextArea.setLineWrap(true);
 			documentTextArea.setText(documentText);
 			documentTextArea.setPreferredSize(documentPannelDimensions);
-			documentTextArea.getDocument().addDocumentListener(new DocumentTextListener(this));
+			documentTextArea.getDocument().addDocumentListener(documentListener);
 			documentPannel.add(new JScrollPane(documentTextArea), BorderLayout.CENTER);
 			MainScreen.mainFrame.pack();
 			MainScreen.mainFrame.setVisible(true);
 			repaint();
+			documentManager = new DocumentManager(this);
+			documentManagerThread = new Thread(documentManager);
+			documentManagerThread.start();
 		}
 	}
 
 	public String getDocumentContent() {
 		return documentTextArea.getText();
+	}
+
+	public void setDocumentContent(String content) {
+		documentListener.nocatch = true;
+		documentTextArea.setText(content);
+		documentListener.nocatch = false;
 	}
 
 }
@@ -528,6 +542,7 @@ class TextAreaListener implements KeyListener {
 class DocumentTextListener implements DocumentListener {
 
 	private MainScreen mainScreen = null;
+	public boolean nocatch = false;
 
 	public DocumentTextListener(MainScreen mainScreen) {
 		this.mainScreen = mainScreen;
@@ -535,16 +550,24 @@ class DocumentTextListener implements DocumentListener {
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		System.err.println(mainScreen.getDocumentContent()) ;
+		if (nocatch)
+			return;
+		int offset = e.getOffset();
+		int length = e.getLength();
+		String content = mainScreen.getDocumentContent().substring(offset,  offset+length) ;
+		mainScreen.documentManager.sendInsert(offset, length, content);
 	}
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		System.err.println(mainScreen.getDocumentContent()) ;
+		if (nocatch)
+			return;
+		int offset = e.getOffset();
+		int length = e.getLength();
+		mainScreen.documentManager.sendRemove(offset, length);
 	}
 
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		System.err.println(mainScreen.getDocumentContent()) ;
 	}
 };
