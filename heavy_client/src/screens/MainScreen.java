@@ -25,11 +25,12 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.border.BevelBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import metadata.Context;
 
 public class MainScreen extends JPanel {
-
 
 	public static final String LOGIN_FEATURE = "You must be logged to use this feature. Use our website or press 'alt-R' to create an account.";
 
@@ -44,7 +45,7 @@ public class MainScreen extends JPanel {
 	private static final long serialVersionUID = 2643713053880588518L;
 	JTabbedPane discussionPannel = null;
 	JPanel documentPannel = null;
-	StringBuilder documentText = null;
+	String documentText = null;
 	JTextArea documentTextArea = null;
 	HashMap<String, JPanel> discussionPannelTabs = new HashMap<String, JPanel>();
 	HashMap<String, JComponent> statusBarComponents = new HashMap<>();
@@ -63,6 +64,7 @@ public class MainScreen extends JPanel {
 	public ChatManager chatManager = null;
 	public Thread chatManagerThread = null;
 	private HashMap<String, JTextArea> discussionPannelText = new HashMap<String, JTextArea>();
+	Dimension documentPannelDimensions = new Dimension();
 
 	public MainScreen() {
 		super();
@@ -117,7 +119,6 @@ public class MainScreen extends JPanel {
 		screenHasFinished = true;
 	}
 
-
 	public void prepare() {
 		prepareMenuBar();
 		JSplitPane documentContainer = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, prepareTextPanel(),
@@ -141,11 +142,11 @@ public class MainScreen extends JPanel {
 	}
 
 	private JPanel prepareTextPanel() {
-		Dimension documentPannelDimensions = new Dimension();
 		documentPannel = new JPanel();
 
 		documentPannelDimensions.setSize(context.getDimension().getWidth() / 4 * 3, context.getDimension().getHeight());
 		documentPannel.setPreferredSize(documentPannelDimensions);
+		documentPannel.setLayout(new BorderLayout());
 		return documentPannel;
 	}
 
@@ -404,19 +405,28 @@ public class MainScreen extends JPanel {
 	}
 
 	public void loadProject() {
-		for (Component component: documentPannel.getComponents()) {
-			documentPannel.remove(component) ;
+		for (Component component : documentPannel.getComponents()) {
+			documentPannel.remove(component);
 		}
 		if (context.document.isLoaded()) {
-			documentText = new StringBuilder(context.document.getContent()) ;
-			documentTextArea = new JTextArea() ;
+			documentText = context.document.getContent();
+			documentTextArea = new JTextArea();
 			documentTextArea.setEditable(true);
 			documentTextArea.setFont(new Font("Serif", Font.PLAIN, 15));
 			documentTextArea.setWrapStyleWord(true);
 			documentTextArea.setLineWrap(true);
-			documentPannel.add(documentTextArea);
-			documentTextArea.setText(documentText.toString());
+			documentTextArea.setText(documentText);
+			documentTextArea.setPreferredSize(documentPannelDimensions);
+			documentTextArea.getDocument().addDocumentListener(new DocumentTextListener(this));
+			documentPannel.add(new JScrollPane(documentTextArea), BorderLayout.CENTER);
+			MainScreen.mainFrame.pack();
+			MainScreen.mainFrame.setVisible(true);
+			repaint();
 		}
+	}
+
+	public String getDocumentContent() {
+		return documentTextArea.getText();
 	}
 
 }
@@ -459,7 +469,7 @@ class MainScreenActionManager implements ActionListener {
 		} else if (action.equals("disconnect_user")) {
 			Context.singleton.user.logout();
 			screen.chatManager.stopChatServer();
-		} else if (action.matches("^speak_with_.*$")) {
+		} else if (action.matches("^speak_with_.+$")) {
 			screen.addDiscussionTab(action.substring(11, action.length()));
 		} else if (action.equals("create_project")) {
 			new ProjectCreationForm(screen).run();
@@ -472,7 +482,7 @@ class MainScreenActionManager implements ActionListener {
 		} else if (action.equals("manage_group")) {
 			new GroupManagingForm(screen).run();
 		} else if (action.equals("delete_group")) {
-			new GroupDeletionForm(screen).run(new String[]{"test", "test2", "test3"});
+			new GroupDeletionForm(screen).run(new String[] { "test", "test2", "test3" });
 		}
 		((MainScreen) screen).contextUpdatePropagation();
 	}
@@ -514,3 +524,27 @@ class TextAreaListener implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 	}
 }
+
+class DocumentTextListener implements DocumentListener {
+
+	private MainScreen mainScreen = null;
+
+	public DocumentTextListener(MainScreen mainScreen) {
+		this.mainScreen = mainScreen;
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent e) {
+		System.err.println(mainScreen.getDocumentContent()) ;
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent e) {
+		System.err.println(mainScreen.getDocumentContent()) ;
+	}
+
+	@Override
+	public void changedUpdate(DocumentEvent e) {
+		System.err.println(mainScreen.getDocumentContent()) ;
+	}
+};
