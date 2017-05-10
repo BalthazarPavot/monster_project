@@ -70,12 +70,30 @@ public class ModelManager {
 		return null;
 	}
 
-	public String unmapPermission(model.Permission perms) {
+	public String unmapDocument() {
+		return unmapDocument(Context.singleton.document);
+	}
+
+	public String unmapDocument(model.Document doc) {
 		JAXBContext jc = null;
 		StringWriter result = new StringWriter();
 
 		try {
 			jc = JAXBContext.newInstance(model.Document.class);
+			Marshaller marshaller = jc.createMarshaller();
+			marshaller.marshal(doc, result);
+		} catch (JAXBException e) {
+			Context.singleton.setSilencedError(e);
+		}
+		return result.toString();
+	}
+
+	public String unmapPermission(model.Permission perms) {
+		JAXBContext jc = null;
+		StringWriter result = new StringWriter();
+
+		try {
+			jc = JAXBContext.newInstance(model.Permission.class);
 			Marshaller marshaller = jc.createMarshaller();
 			marshaller.marshal(perms, result);
 		} catch (JAXBException e) {
