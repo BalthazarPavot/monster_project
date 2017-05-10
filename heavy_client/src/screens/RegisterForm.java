@@ -31,8 +31,8 @@ public class RegisterForm extends JDialog implements ActionListener {
 	private MainScreen parentScreen;
 
 	public RegisterForm(MainScreen screen) {
-		super(Screen.mainFrame, "Register", true);
-		this.parent = Screen.mainFrame;
+		super(MainScreen.mainFrame, "Register", true);
+		this.parent = MainScreen.mainFrame;
 		context = Context.singleton;
 		parentScreen = screen;
 	}

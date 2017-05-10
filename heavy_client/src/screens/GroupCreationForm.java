@@ -24,8 +24,8 @@ public class GroupCreationForm extends JDialog implements ActionListener {
 	String groupName = null ;
 
 	public GroupCreationForm(MainScreen screen) {
-		super(Screen.mainFrame, "New Group", true);
-		this.parent = Screen.mainFrame;
+		super(MainScreen.mainFrame, "New Group", true);
+		this.parent = MainScreen.mainFrame;
 		context = Context.singleton;
 	}
 

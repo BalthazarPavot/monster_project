@@ -9,9 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -26,8 +28,19 @@ import javax.swing.border.BevelBorder;
 
 import metadata.Context;
 
-public class MainScreen extends Screen {
+public class MainScreen extends JPanel {
 
+
+	public static final String LOGIN_FEATURE = "You must be logged to use this feature. Use our website or press 'alt-R' to create an account.";
+
+	public static final String GROUP_FEATURE = "You must be into a group to use this feature";
+
+	protected static JFrame mainFrame = null;
+
+	protected Context context = null;
+	protected boolean screenHasFinished = false;
+	protected ActionListener actionListener = null;
+	protected ArrayList<Component> widgetList = new ArrayList<Component>();
 	private static final long serialVersionUID = 2643713053880588518L;
 	JTabbedPane discussionPannel = null;
 	JPanel documentPannel = null;
@@ -53,8 +66,56 @@ public class MainScreen extends Screen {
 
 	public MainScreen() {
 		super();
+		context = Context.singleton;
+		if (MainScreen.mainFrame == null) {
+			MainScreen.mainFrame = new JFrame();
+		}
+		this.initScreen();
 		this.actionListener = new MainScreenActionManager(this);
 	}
+
+	/**
+	 * Initialize the screen with a new frame, a layout and trigger the first
+	 * display.
+	 */
+	protected void initScreen() {
+		setLayout(new BorderLayout());
+		MainScreen.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		MainScreen.mainFrame.getContentPane().add(this);
+		MainScreen.mainFrame.setBounds(0, 0, context.getDimension().width, context.getDimension().height);
+		this.screenHasFinished = false;
+	}
+
+	/**
+	 * Make the screen to run.
+	 * 
+	 * @return The id of the next game screen.
+	 */
+	public void run() throws IllegalStateException {
+		if (actionListener == null)
+			throw new IllegalStateException();
+		MainScreen.mainFrame.pack();
+		MainScreen.mainFrame.setVisible(true);
+		while (!this.screenHasFinished) {
+			this.repaint();
+			try {
+				Thread.sleep(15);
+			} catch (InterruptedException e) {
+				this.screenTermination();
+			}
+		}
+		screenTermination();
+	}
+
+	public void screenTermination() {
+		for (Component widget : widgetList)
+			this.remove(widget);
+		widgetList = new ArrayList<>();
+		this.removeAll();
+		mainFrame.remove(this);
+		screenHasFinished = true;
+	}
+
 
 	public void prepare() {
 		prepareMenuBar();
@@ -131,7 +192,7 @@ public class MainScreen extends Screen {
 			newProject.setEnabled(true);
 		} else {
 			newProject.setEnabled(false);
-			newProject.setToolTipText(Screen.LOGIN_FEATURE);
+			newProject.setToolTipText(MainScreen.LOGIN_FEATURE);
 		}
 	}
 
@@ -245,7 +306,7 @@ public class MainScreen extends Screen {
 			newGroup.setEnabled(true);
 		} else {
 			newGroup.setEnabled(false);
-			newGroup.setToolTipText(Screen.LOGIN_FEATURE);
+			newGroup.setToolTipText(MainScreen.LOGIN_FEATURE);
 		}
 	}
 
@@ -264,7 +325,7 @@ public class MainScreen extends Screen {
 			manageGroup.setEnabled(true);
 		} else {
 			manageGroup.setEnabled(false);
-			manageGroup.setToolTipText(Screen.GROUP_FEATURE);
+			manageGroup.setToolTipText(MainScreen.GROUP_FEATURE);
 		}
 	}
 
@@ -282,7 +343,7 @@ public class MainScreen extends Screen {
 			deleteGroup.setEnabled(true);
 		} else {
 			deleteGroup.setEnabled(false);
-			deleteGroup.setToolTipText(Screen.GROUP_FEATURE);
+			deleteGroup.setToolTipText(MainScreen.GROUP_FEATURE);
 		}
 	}
 
@@ -369,14 +430,13 @@ class MainScreenActionManager implements ActionListener {
 
 	protected MainScreen screen = null;
 
-	public MainScreenActionManager(Screen screen) {
-		this.screen = (MainScreen) screen;
+	public MainScreenActionManager(MainScreen screen) {
+		this.screen = screen;
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		String action = e.getActionCommand();
 		if (action.equals("exit")) {
-			screen.nextScreenID = ScreenGenerator.QUIT_SCREEN;
 			screen.chatManager.end();
 			while (screen.chatManagerThread.isAlive()) {
 				try {

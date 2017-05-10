@@ -29,8 +29,8 @@ public class LoginForm extends JDialog implements ActionListener {
 	private MainScreen parentScreen;
 
 	public LoginForm(MainScreen screen) {
-		super(Screen.mainFrame, "Login", true);
-		this.parent = Screen.mainFrame;
+		super(MainScreen.mainFrame, "Login", true);
+		this.parent = MainScreen.mainFrame;
 		context = Context.singleton;
 		parentScreen = screen;
 	}

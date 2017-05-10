@@ -21,8 +21,8 @@ public class GroupManagingForm extends JDialog implements ActionListener {
 	private JFrame parent;
 
 	public GroupManagingForm(MainScreen screen) {
-		super(Screen.mainFrame, "Login", true);
-		this.parent = Screen.mainFrame;
+		super(MainScreen.mainFrame, "Login", true);
+		this.parent = MainScreen.mainFrame;
 		context = Context.singleton;
 		parentScreen = screen;
 	}

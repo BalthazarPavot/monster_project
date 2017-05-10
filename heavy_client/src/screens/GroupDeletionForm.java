@@ -24,8 +24,8 @@ public class GroupDeletionForm extends JDialog implements ActionListener {
 	private ArrayList<JCheckBox> boxes = new ArrayList<>();
 
 	public GroupDeletionForm(MainScreen screen) {
-		super(Screen.mainFrame, "Group deletion", true);
-		this.parent = Screen.mainFrame;
+		super(MainScreen.mainFrame, "Group deletion", true);
+		this.parent = MainScreen.mainFrame;
 		context = Context.singleton;
 	}
 

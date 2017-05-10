@@ -27,8 +27,8 @@ public class ProjectOpeningForm extends JDialog implements ActionListener {
 	private String documentName;
 
 	public ProjectOpeningForm(MainScreen screen) {
-		super(Screen.mainFrame, "Open Project", true);
-		this.parent = Screen.mainFrame;
+		super(MainScreen.mainFrame, "Open Project", true);
+		this.parent = MainScreen.mainFrame;
 		context = Context.singleton;
 		parentScreen = screen;
 	}

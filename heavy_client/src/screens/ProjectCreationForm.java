@@ -25,8 +25,8 @@ public class ProjectCreationForm extends JDialog implements ActionListener {
 	private String name;
 
 	public ProjectCreationForm(MainScreen screen) {
-		super(Screen.mainFrame, "New Project", true);
-		this.parent = Screen.mainFrame;
+		super(MainScreen.mainFrame, "New Project", true);
+		this.parent = MainScreen.mainFrame;
 		context = Context.singleton;
 		parentScreen = screen;
 	}

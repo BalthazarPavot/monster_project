@@ -26,8 +26,8 @@ public class ProjectConfForm extends JDialog implements ActionListener {
 	JCheckBox ownerReadNameField = null;
 
 	public ProjectConfForm(MainScreen screen) {
-		super(Screen.mainFrame, "Project Conf.", true);
-		this.parent = Screen.mainFrame;
+		super(MainScreen.mainFrame, "Project Conf.", true);
+		this.parent = MainScreen.mainFrame;
 		context = Context.singleton;
 		parentScreen = screen;
 	}
