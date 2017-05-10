@@ -15,6 +15,10 @@ public class Context {
 
 	static public Context singleton = new Context();
 
+	final private static String TEST_SERVER_NAME = "simulateServer.py";
+	final private static String TEST_SERVER_DYIRECTORY = "test";
+	// final private static String TEST_SERVER_PATH = String.join("/",
+	// new String[] { TEST_SERVER_NAME, TEST_SERVER_DYIRECTORY });
 	private String serverIP = "127.0.0.1";
 	private Integer serverPort = 8520;
 	private String serverAdress = String.format("%s:%d", serverIP, serverPort);
@@ -30,10 +34,11 @@ public class Context {
 	public Document document = new Document();
 	public Client client = new Client();
 	final public ErrorManager errorManager = ErrorManager.singleton;
-	public ModelManager modelManager = null ;
+	public ModelManager modelManager = null;
+	private Process serverProcess = null;
 
 	private Context() {
-		modelManager = new ModelManager () ;
+		modelManager = new ModelManager();
 		loadConf();
 	}
 
@@ -99,13 +104,15 @@ public class Context {
 	public void loadConfiguration(String[] args) {
 		HashMap<String, String> options = null;
 
-		if (args.length > 1) {
+		if (args.length > 0) {
 			options = parseArgs(args);
 			if (options.containsKey("config")) {
 				confLoaded = false;
 				loadConf(options.get("config"), true);
 			}
 			loadOptions(options);
+			// } else {
+			// runTestServer("../test");
 		}
 	}
 
@@ -153,12 +160,34 @@ public class Context {
 				setServerIP(value);
 			else if (option.equals("client_ip"))
 				setClientIP(value);
-			else if (option.equals("config")) {
+			else if (option.equals("run_test_server")) {
+				runTestServer(value);
+			} else if (option.equals("config")) {
 				errorManager.info("Ignoring already loaded option: %s=%s", option, value);
 				continue;
 			} else
 				throw new IllegalArgumentException("Unknown option: " + option);
 			errorManager.info("Loaded option: %s=%s", option, value);
+		}
+	}
+
+	private void runTestServer(String option) {
+		ProcessBuilder pb = null;
+		errorManager.info("Launching the test server");
+		pb = new ProcessBuilder("python", TEST_SERVER_NAME);
+		if (option.equals("true"))
+			pb.directory(new File(TEST_SERVER_DYIRECTORY));
+		else
+			pb.directory(new File(option));
+		try {
+			serverProcess = pb.start();
+			if (serverPort == null)
+				errorManager.info("Not launched...");
+			else
+				errorManager.info("Launched.");
+		} catch (IOException e) {
+			e.printStackTrace();
+			errorManager.setError(e);
 		}
 	}
 
@@ -262,6 +291,14 @@ public class Context {
 			setClientIP(clientIP);
 		if (serverIP != null)
 			setServerIP(serverIP);
+	}
+
+	public void finish() {
+		if (serverProcess != null) {
+			errorManager.info("Destroying test server...");
+			serverProcess.destroy();
+			errorManager.info("Destroyed.");
+		}
 	}
 
 }

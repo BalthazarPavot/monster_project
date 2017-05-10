@@ -25,6 +25,7 @@ public class MonsterProject {
 		screen = new MainScreen() ;
 		screen.prepare () ;
 		screen.run () ;
+		Context.singleton.finish () ;
 		Context.singleton.errorManager.info("Existed normally");
 		System.exit(0);
 	}
