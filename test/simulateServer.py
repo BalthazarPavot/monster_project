@@ -162,9 +162,12 @@ class Context ():
         client=Client(type=Client.HEAVY, port=8523, ip="127.0.0.1")),
     ]
     self.documents = {
-      "doc_1": Document (content=Content ("This is the editable content of the doc no 1")), 
-      "doc_2": Document (content=Content ("This is the editable content of the doc no 2")), 
-      "doc_3": Document (content=Content ("This is the editable content of the doc no 3"))
+      "doc_1": Document (id="doc_1", name="doc_1",
+        content=Content ("This is the editable content of the doc no 1")), 
+      "doc_2": Document (id="doc_2", name="doc_2",
+        content=Content ("This is the editable content of the doc no 2")), 
+      "doc_3": Document (id="doc_3", name="doc_3",
+        content=Content ("This is the editable content of the doc no 3"))
     }
 
   def heavy_users (self):
@@ -201,6 +204,7 @@ class GetLoggedUsers ():
     users = self.get_connected_users ()
     xml_users = map (lambda user:user.xml(), users)
     xml_data = '\n'.join (["<userlist>"] + xml_users + ["</userlist>"])
+    print xml_data
     return xml_data
 
   def GET (self, *args):
@@ -260,6 +264,7 @@ class LoginUser ():
     context.users.append (User (**form))
     context.logged_users.append (context.users[-1])
 
+
 class GetDocument ():
 
   def POST (self, *args):
@@ -267,12 +272,39 @@ class GetDocument ():
 
   def GET (self, *args):
     form = web.input ()
-    doc = context.documents.get (form.get ("project_name", None), None)
+    id = form.get ("document_id", form.get ("document_name", None))
+    doc = context.documents.get (id, None)
     return doc and doc.xml ()
 
-  def register (self, form):
-    context.users.append (User (**form))
-    context.logged_users.append (context.users[-1])
+
+class UpdateDocument ():
+
+  def POST (self, *args):
+    form = web.input ()
+    id = form.get ("document_id", None)
+    document = context.documents.get (id, None)
+    if form.has_key ("type"):
+      try:
+        offset = int (form.get ("offset", None))
+        length = int (form.get ("length", None))
+      except ValueError:
+        offset, length = None, None
+      print offset, length
+      if form["type"] == "remove":
+        self.remove(document, offset, length)
+      elif form["type"] == "insert":
+        self.insert(document, offset, length, form.get("content"))
+      return
+    return document.content.text
+
+  def remove (self, document, offset, length):
+    document.content.text = document.content.text[:offset] + document.content.text[offset+length:]
+
+  def insert (self, document, offset, length, content):
+    document.content.text = document.content.text[:offset] + content + document.content.text[offset:]
+
+  def GET (self, *args):
+    return
 
 
 if __name__ == "__main__":
@@ -282,6 +314,7 @@ if __name__ == "__main__":
   urls = (
     "/document/users", "GetLoggedUsers",
     "/document/ask", "GetDocument",
+    "/document/up", "UpdateDocument",
     "/user/new", "CreateUser",
     "/user/login", "LoginUser",
     )
