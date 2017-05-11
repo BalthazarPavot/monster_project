@@ -12,12 +12,6 @@ public class InitializeListener implements ServletContextListener {
 	public static DatabaseServer dbs;
 
 	@SuppressWarnings("static-access")
-	public InitializeListener() {
-		this.dbs = new DatabaseServer();
-
-	}
-
-	@SuppressWarnings("static-access")
 	public final void contextInitialized(final ServletContextEvent sce) {
 		this.dbs = new DatabaseServer();
 	}

@@ -1,34 +1,26 @@
 package com.monsterProject.beans;
 
+public class Message {
 
-public class Message
-{
-	
 	private String chatterName = null;
-		private String textmsg = null;
-		private String time ;
-	
-	
-	public Message(String name, String message, String time)
-	{
-		this.chatterName = name;
-		this.textmsg= message;
-		this.time= time;
-	}
-	
-	public Message()
-	{
-		
-	}
-	
+	private String textmsg = null;
+	private String time;
 
-	public String getChatterName()
-	{
+	public Message(String name, String message, String time) {
+		this.chatterName = name;
+		this.textmsg = message;
+		this.time = time;
+	}
+
+	public Message() {
+
+	}
+
+	public String getChatterName() {
 		return chatterName;
 	}
 
-	public String getMessage()
-	{
+	public String getMessage() {
 		return textmsg;
 	}
 
@@ -44,5 +36,4 @@ public class Message
 		this.time = time;
 	}
 
-	
 }

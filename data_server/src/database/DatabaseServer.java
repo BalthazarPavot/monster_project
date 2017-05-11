@@ -162,8 +162,8 @@ public class DatabaseServer {
 		}
 		return addUserInGroup(idOwner, idGroup);
 	}
-	
-	public int checkUserPass (String pseudo, String password) {
+
+	public int checkUserPass(String pseudo, String password) {
 		String query = "SELECT `id` FROM `user` WHERE `user`.`pseudo`=\"" + pseudo
 				+ "\" 							AND   `user`.`password`=\"" + password + "\") ;";
 		System.out.println(query);
@@ -171,7 +171,6 @@ public class DatabaseServer {
 			return NO_ERROR;
 		return ERR_BAD_PSEUDO_OR_PASS;
 	}
-	
 
 	public void closeConnection() throws SQLException {
 		dbh.closeConnection();

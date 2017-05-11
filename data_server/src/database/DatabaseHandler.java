@@ -52,6 +52,7 @@ public class DatabaseHandler {
 
 	/**
 	 * Check if there is a row in the query
+	 * 
 	 * @param query
 	 * @return true if row exist
 	 * @throws SQLException
@@ -61,17 +62,17 @@ public class DatabaseHandler {
 		Statement stmt;
 		try {
 			stmt = this.conn.createStatement();
-		ResultSet rs = stmt.executeQuery(query);
-		ResultSetMetaData rsmd = rs.getMetaData();
-		int columnNumber = rsmd.getColumnCount();
-		while (rs.next()) {
-			for (int i = 1; i <= columnNumber; i++) {
-				out = Boolean.valueOf(rs.getString(i)) != null;
+			ResultSet rs = stmt.executeQuery(query);
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int columnNumber = rsmd.getColumnCount();
+			while (rs.next()) {
+				for (int i = 1; i <= columnNumber; i++) {
+					out = Boolean.valueOf(rs.getString(i)) != null;
+				}
 			}
-		}
-		rs.close();
-		stmt.close();
-		return out;
+			rs.close();
+			stmt.close();
+			return out;
 		} catch (SQLException e) {
 			return false;
 		}

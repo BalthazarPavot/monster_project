@@ -35,7 +35,6 @@ public class UserNew extends HttpServlet {
 		String mail = request.getParameter("email");
 		String mdp = request.getParameter("motDePasse");
 		InitializeListener.dbs.addUser(nom, mail, mdp);
-		InitializeListener.dbs.checkUserPass(nom, mdp);
 	}
 
 }
