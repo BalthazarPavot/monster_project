@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Rsrc-Class-Path: ./ commons-codec-1.9.jar commons-logging-1.2.jar flue
+ nt-hc-4.5.3.jar httpclient-4.5.3.jar httpclient-cache-4.5.3.jar httpc
+ lient-win-4.5.3.jar httpcore-4.4.6.jar httpmime-4.5.3.jar jna-4.1.0.j
+ ar jna-platform-4.1.0.jar common.jar
+Class-Path: .
+Rsrc-Main-Class: MonsterProject
+Main-Class: org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader
+

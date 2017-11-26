@@ -1,0 +1,152 @@
+
+    Chapitre 2: Le client Lourd
+
+    Le client lourd avait comme fonctionnalités imposées de pouvoir chatter directement entre les utilisateurs sans passer par le serveur d'application, et de permettre de faire tout ce que le client léger permet de faire.
+
+Pour chacune de ces fonctionnalités, un détail de l'implémentation sera donnée.
+
+    2.1 Structure Globale du client lourd
+
+    Le client lourd possède une structure assez simple: 
+
+    Les Métadonnées de l'application, avec le contexte d'exécution de l'application, modèles, etc
+
+    Les réseau, qui contient les classes de communication avec le serveur d'application, le chat
+
+    Les écrans, qui contient toute la GUI avec l'écran principale, les formulaires, etc
+
+
+    2.2 Fonctionnalités
+
+
+    1. L'interface graphique
+
+    L'interface graphique, réalisée à l'aide des bibliothèques swing et awt, possède une barre de menu et haut, un chat et un panneau d'édition de document au centre, et une barre d'état en bas.
+
+La barre de menu est séparée en trois menu: "Projects" (alt+p), "User" (alt+u) et "Group" (alt+g). Le menu "Project" permet de gérer le projet: sa création, son ouverture, sa configuration des droits et l'arrêt de l'application. Le menu "User" permet de se connecter, se déconnecter et de créer un utilisateur. Enfin, le menu "Group" permet de créer un groupe, d'en gérer les membres et de dissoudre des groupes possédés par l'utilisateur.
+
+    Comme certaines fonctionnalités ne peuvent pas être utilisées dans certains cas (utilisateur connecté ou non, document ouvert, ...), certaines fonctionnalités sont rendues indisponibles par la désactivation des boutons.
+
+Par exemple, un utilisateur non connecté ne pourra pas se déconnecter. Ce bouton sera donc affiché, mais rendu non cliquable tant que l'utilisateur ne se connecte pas.
+
+    2. Fonctionnalités des utilisateurs
+
+    Quand un utilisateur arrive sur l'application, il peut se connecter via le bouton "Connect" (alt+c). Celui-ci ouvre une pop-up demandant son login et son mot de passe, propose de soit annuler ("Cancel") ou
+
+valider l'opération ("OK"). Si l’opération de connexion échoue, un message d'erreur s'affiche et l'utilisateur peut recommencer en éditant les champs d'entrée. Enfin, la barre d'état affiche que vous êtes connecté et affiche le login avec lequel vous êtes connecté. Toutes les pop-up fonctionnent de cette manière, ainsi leur fonctionnement ne sera plus détaillé par la suite. Si l'utilisateur ne possède pas de compte auquel se connecter, il peut utiliser le bouton "New User" (alt+r) pour se créer un compte. Celui-ci ouvre une pop-up demandant le login, le mail, le mot de passe et le mot de passe de vérification. Si le mot de passe de vérification est différent du mot de passe, ou si une erreur côté serveur est lancée, un message d'erreur est affiché. L'enregistrement d'un utilisateur le connecte automatiquement. Enfin, l'utilisateur peut se déconnecter en utilisant le bouton "Disconnect" (alt+d).
+
+    Lors de la connexion d'un utilisateur, une nouvelle parties du programme est activées: le chat. Quand un utilisateur se déconnecte, le chat est désactivé (mais toujours affiché).
+
+La partie du chat vous est présentée en détails dans la partie 5.
+
+    3 Fonctionnalités des groupes
+
+    Initialement basé sur un système de droit similaire à celui d'UNIX, les droits d'édition d'un document peuvent affiné à l’échelle d'un utilisateur ou d'un groupe. La gestion des groupes est donc importante et se fait dans le menu "Users".
+
+La création d'un groupe se fait à l'aide du bouton "New Group" (alt+g puis 'n'). Ce bouton fait simplement apparaître une pop-up demandant le nom du groupe. La gestion des groupes de l'utilisateur se fait via l'utilisation du bouton "Manage Group" (alt+g puis 'm'). La pop-up apparaissant devait initialement posséder un onglet par groupe possédé par l'utilisateur, et dans chaque onglet, l'utilisateur aurait pu déterminer qui inclure dans le groupe en question. Par manque de temps, cette pop-up n'a pas été implémentée. Enfin, la suppression d'un groupe se serait fait via le bouton "Delete Group" (alt+g puis 'd'), qui affiche l'ensemble des groupes possédés par l'utilisateur courant, à côté desquels se trouve une case à cocher pour le supprimer. Un exemple de groupes inexistants sont affichés pour montrer son fonctionnement. Mais celui-ci ne fait qu'afficher un message d'erreur lors de la délétion des groupes sélectionnés.
+
+    4 Fonctionnalité des documents
+
+    Il est possible pour l'utilisateur de créer un document uniquement s'il est connecté. Pour cela, il peut utiliser le bouton "New Project" (alt+n) qui fait apparaître une pop-up demandant le nom du projet.
+
+Cette fonctionnalité n'a pas pu être testée car elle est indisponible du côté du serveur d'application. Pour l'ouverture de projet, le bouton "Open Project" (alt+o) permet de faire apparaître une pop-up demandant le nom du document le le nom de l'utilisateur qui possède ce document. Cela est du au fait qu'un document d'un même nom peut très bien exister chez deux utilisateurs différents. En cliquant sur "OK", si le document existe, il est chargé en mémoire et affiché dans la fenêtre des documents. Le programme possède donc deux versions du document en interne: un dans une mémoire tampon, l'autre dans le champs de texte. Un seul document ne peut être ouvert à la fois. Si le document n'existe pas, le document courant est déchargé (s'il y a un document chargé).
+
+    Quand un document est édité, les insertions et délétions sont envoyées au serveur d'application qui renvoie si l'opération est acceptée. Dans tous les cas, le document affiche la modification de l'utilisateur
+
+dans le champs de texte. Si celle-ci est acceptée, la mémoire tampon du document est remplacée par le contenue du champ texte. Sinon, l'inverse se passe: la mémoire tampon du document n'est pas modifié et le document du champs de texte est remplacée par le contenu de la mémoire tampon. Cela permet un affichage fluide du document au fil de son édition, même par plusieurs utilisateurs simultanément.
+
+    5 Fonctionnalité du chat
+
+    Quand l'utilisateur se connecte, le chat est activé. Cela signifie qu'un client et un serveur sont créés pour le chat. Régulièrement, si un document est chargé, le manager de chat va demander
+
+au serveur d'application quels sont les autres utilisateurs connectés et utilisant le même document, et par la même occasion, spécifier qu'il est toujours connecté (c'est comme cela que le serveur "sait" qui est toujours connecté). Le serveur renvoie une liste d'utilisateurs en spécifiant qui possède un client léger et qui possède un client lourd. Le manager de chat va alors extraire les utilisateurs nouvellement connectés et les afficher dans le premier onglet du chat s'ils possèdent un client lourd.
+
+    Quand l'utilisateur veut chatter avec un autre utilisateur, il lui suffit de cliquer sur le login de l'utilisateur dans le premier onglet du chat. Un nouvel onglet s'ajoute alors. Dans cet onglet se trouve deux panneaux.
+
+Le panneau principale (le plus grand) affiche la discussion courante avec pour chaque ligne le login de la personne qui a envoyé le message suivi de son message, comme ceci:
+
+    <user_1>: Hello!
+
+    <user_2>: Hey, what's up?
+
+Le petit panneau en bas est la partie où l'utilisateur écrit son message. Pour l'envoyer, il appuie sur la touche "Entrée".
+
+    Pour envoyer le message, on utilise directement l'adresse IP et le port du destinataire, obtenus lors de la demande des utilisateurs connectés au document courant, en passant par le client de chat.
+
+Parallèlement, le serveur de chat permet de recevoir les messages des autres utilisateurs. C'est ainsi que lors de la réception d'un message, le serveur de chat va "dire" au client graphique de créer un nouvel onglet portant le nom du destinataire si celui-ci n'existe pas encore. Il va ensuite dire au client graphique d'afficher le nouveau message dans cet onglet.
+
+    6 Lancement et options de démarrage
+
+    Le client lourd a la possibilité d'être configuré au lancement. En effet, il utilise de le port 8521 pour son serveur de chat et communique avec le serveur d'application en utilisant l'IP 127.0.0.1 et le port 8520.
+
+Seulement, pour des raisons de conflit de ports, deux clients lourds lancés sur une même machine provoque des erreurs. De plus, le serveur d'application pourrait très bien changer de localisation et/ou de port.
+C'est ainsi qu'a été mise en place l'utilisation des paramètres pour configurer le client lourd. C'est donc avec les options 
+
+    2.3 Technologies utilisées
+
+
+    Tout le code utilisé pour le client lourd ne vient pas uniquement de nous. En effet, deux fonctions ont été adaptées depuis stackoverflow (une pour le parsing des argument de la ligne de commande,
+
+l'autre pour le en parallèle d'un programme système), et quelques bibliothèques ont été utilisées. Nous vous présentons ici en détail l’utilisation respectives des bibliothèques et autres technologies utilisées.
+
+    1 Bibliothèques de la JEE Swing et awt
+
+    Pour créer la partie graphique du client lourd, les bibliothèques awt et swing ont été utilisées. Plus précisément, swing a été utilisée pour créer les éléments graphiques tel que les menus,
+
+les labels les entrées utilisateurs, les boutons etc. La bibliothèque awt n'a pas été utilisées pour les graphismes à proprement parler car elle a surtout été utilisée pour ses écouteurs d’éventements et ses grilles d'organisation de composant graphiques.
+
+    2 Les Bibliothèques de réseau d'apache
+
+    Pour pouvoir communiquer efficacement avec le serveur d'application, il était préférable d'utiliser du code robuste, qui a été éprouvé et a fait ses preuves.
+
+C'est pourquoi la bibliothèque externe HTTPClient d'apache a été utilisée. Celle ci a été utilisée pour l'envoie de requêtes HTTP et a permit de facilement manipuler les paramètres des requêtes. De plus, les réponses HTTP des requêtes ont été parsées en utilisant cette bibliothèque, ce qui nous a permit de gagner beaucoup de temps. Elle n'a cependant pas été utilisée pour les clients et serveurs de chat, qui s'envoyaient des messages trop simples ( de la forme "login - message") pour que cette bibliothèque puisse être exploitée efficacement.
+
+    3 Représentation des données XML
+
+    Pour échanger des données avec le serveur d'application, il était nécessaire d'utiliser des représentations des données simple et claire. C'était donc lors de ces échanges que nous avons choisis d'utiliser l'XML.
+
+C'est ainsi qu'il a été décidé que les models seraient transmis à l'aide de leur représentation XML. Cette représentation des données est difficile à parser et à créer. C'est pourquoi il a été décidé d'utiliser une bibliothèque efficace pour passer d'une classe Java à sa représentation XML et vis versa: javax.xml. Cette bibliothèque permet de représenter une instance de classe en XML et inversement simplement en ajoutant des annotations sur la classe et sur ses attributs. Il nous a donc été très facile d'échanger des informations représentées en XML.
+
+    4 Models partagés
+
+    Pour que la représentation des données soit la même pour chacun, les models ont été créés dans une bibliothèque propre au projet nommée "common".
+
+Celle-ci contient donc les models utilisés par l'application graphique lourde. Elle ne vient cependant pas d'une source externe.
+
+    5 Test via un script Python
+
+    Le test du client lourd était un point cruciale car les serveurs d'applications et de données n'étant pas prêt tout de suit, il a fallut utiliser un moyen de les remplacer temporairement.
+
+Le choix d'utiliser le python pour une telle tache est très simple: la rapidité de développement pour un application de ce genre et une meilleur connaissance de ce langage.
+En effet, en moins de 350 lignes nous avons pu mettre en place un serveur permettant de:
+
+    créer un utilisateur;
+
+    logger des utilisateurs;
+
+    récupérer les personnes loggées;
+
+    récupérer un document existant;
+
+    le mettre à jour (insertions et délétions).
+
+C'est ainsi que presque toutes les fonctionnalités du client lourd ont été testées (la récupération des utilisateurs loggés permettant de tester le chat).
+
+    2.4 Temps passé et ressources utilisées
+
+    Le client lourd est le fruit d'un long travail régulier. Il est ainsi difficile de déterminer le temps exacte qu'il a fallut pour réaliser cette partie de l'application.
+
+De plus, pour tester cette partie, il a été nécessaires de créer un script  permettant de simuler le serveur d'application et de données (simulateServer.py) en attendant que ceux-ci soient fonctionnels, ce qui a aussi pris du temps. Pour un total de 137 commits, on peut estimer le temps passé à environ 76 heures.
+
+    Pour réaliser le client lourd, stackoverflow a beaucoup été utilisé, principalement pour comprendre le fonctionnement de certains composés graphiques, et pour la création et le mapping des fichiers XML.
+
+Enfin, afin de comprendre le fonctionnement de la bibliothèque d'apache, cette page https://www.mkyong.com/java/apache-httpclient-examples/ a été très largement utilisée.
+
+
+
+
+
+
+
+
+
